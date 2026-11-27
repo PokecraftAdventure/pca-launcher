@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self';">
+        <title>Pokecraft Adventure - Registros</title>
+        <link rel="stylesheet" href="assets/css/launcher.css">
+        <link rel="stylesheet" href="assets/css/log.css">
+    </head>
+    <body class="logbody">
+        <div class="dragbar"></div>
+        <div class="other">
+            <div class="frame hide">
+                <div id="minimize" class="button-frame icon-minimize"></div>
+                <div id="maximize" class="button-frame icon-maximize"></div>
+                <div id="close" class="button-frame icon-close"></div>
+            </div>
+        </div>
+
+        <!-- Ventana independiente de registros: el juego y su registro viven en el proceso principal, esta ventana solo los muestra -->
+        <div class="console logwin" data-error="0" data-loading="0">
+            <section class="log-view">
+                <header class="log-top">
+                    <div class="brand"><img class="brand-logo" src="assets/images/logo.svg" alt="">POKECRAFT <span>ADVENTURE</span></div>
+                    <!-- Unico camino de vuelta: cierra los registros y muestra el launcher (el anillo si aun carga, Inicio si ya se juega) -->
+                    <button type="button" class="pa-btn log-back" title="Ir al launcher" aria-label="Ir al launcher"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 6l-6 6 6 6"/></svg><span>Launcher</span></button>
+                </header>
+
+                <div class="log-head">
+                    <div class="log-badge"></div>
+                    <div class="log-head-text">
+                        <div class="log-title">Registros del juego</div>
+                        <div class="log-sub"></div>
+                    </div>
+                    <!-- Solo existe mientras el juego carga: detiene la carga (igual que Cancelar en el anillo) -->
+                    <button type="button" class="pa-btn log-cancel">Cancelar</button>
+                </div>
+
+                <!-- Solo si el juego se cerró de golpe: la acción que ayuda va justo debajo del título del problema -->
+                <div class="log-alert" role="alert">
+                    <p>Crea el informe y adjúntalo en tu ticket de Discord para que podamos ayudarte.</p>
+                    <button type="button" class="pa-btn log-create">Crear informe para soporte</button>
+                </div>
+
+                <div class="log-toolbar">
+                    <div class="seg seg-small log-filters" role="group" aria-label="Filtrar registros">
+                        <button type="button" class="on" data-filter="all" aria-pressed="true">Todo</button>
+                        <button type="button" data-filter="warn" aria-pressed="false">Avisos y errores</button>
+                        <button type="button" data-filter="error" aria-pressed="false">Solo errores</button>
+                    </div>
+                    <input type="text" class="log-search" placeholder="Buscar mod o error" aria-label="Buscar en los registros" spellcheck="false">
+                    <div class="log-tools">
+                        <button type="button" class="pa-btn log-pause" title="Pausar el registro" aria-label="Pausar el registro"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg><span>Pausar</span></button>
+                        <button type="button" class="pa-btn log-copy" title="Copiar el registro" aria-label="Copiar el registro"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15"/></svg><span>Copiar</span></button>
+                        <button type="button" class="pa-btn log-open" title="Abrir la carpeta de registros" aria-label="Abrir la carpeta de registros"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5h3.6l2 2.5h7.4A2.5 2.5 0 0 1 21 10v7.5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z"/></svg><span>Carpeta</span></button>
+                    </div>
+                </div>
+
+                <div class="log-box" data-state="ok">
+                    <div class="log-lines" tabindex="0" aria-live="off"></div>
+                    <div class="log-empty" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h9"/></svg>
+                        <div class="empty-none"><b>Aún no hay registros</b><span>Aparecerán aquí la próxima vez que abras el juego.</span></div>
+                        <div class="empty-nomatch"><b>Ningún registro coincide</b><span>Prueba con otro filtro o con otra búsqueda.</span></div>
+                    </div>
+                    <button type="button" class="log-down" aria-label="Ir a los últimos registros" title="Ir a los últimos registros">
+                        <svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+                    </button>
+                </div>
+
+                <footer class="log-foot">
+                    <span class="log-foot-note" role="status"></span>
+                </footer>
+            </section>
+        </div>
+        <script src="assets/js/log.js" type="module"></script>
+    </body>
+</html>

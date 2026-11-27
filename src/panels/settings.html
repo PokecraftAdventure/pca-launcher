@@ -1,0 +1,109 @@
+<div class="container">
+    <div class="set-grid">
+        <!-- Izquierda: todo lo que cambia como corre el juego -->
+        <div class="set-col">
+            <h2 class="set-head">Juego</h2>
+            <section class="card">
+                <div class="card-row">
+                    <div class="card-title">Memoria RAM</div>
+                    <div class="ram-value">6 GB</div>
+                </div>
+                <div class="ram-slider">
+                    <input type="range" class="ram-range" min="0" max="7" step="1" value="3" aria-label="Memoria RAM del juego">
+                    <div class="ram-ticks" aria-hidden="true"></div>
+                </div>
+                <div class="card-sub ram-info"></div>
+            </section>
+
+            <section class="card">
+                <div class="card-title">Calidad gráfica</div>
+                <div class="seg seg-quality">
+                    <button type="button" class="quality-btn" data-quality="minimo">Mínimo</button>
+                    <button type="button" class="quality-btn" data-quality="medio">Medio</button>
+                    <button type="button" class="quality-btn" data-quality="alto">Alto</button>
+                    <button type="button" class="quality-btn" data-quality="ultra">Ultra</button>
+                </div>
+                <div class="card-sub quality-suggestion">Se aplica al abrir el juego.</div>
+            </section>
+
+            <section class="card card-flex">
+                <div>
+                    <div class="card-title">Resolución</div>
+                    <div class="card-sub">Ideal: 1280 × 720</div>
+                </div>
+                <div class="res">
+                    <input type="number" class="width-size input-resolution">
+                    <span>×</span>
+                    <input type="number" class="height-size input-resolution">
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card-title">Durante el juego</div>
+                <div class="opt opt-last">
+                    <div>
+                        <div class="opt-title">Dejar a la vista</div>
+                        <div class="card-sub">Una sola pantalla a la vez.</div>
+                    </div>
+                    <div class="seg seg-small seg-during">
+                        <button type="button" data-value="launcher">Launcher</button>
+                        <button type="button" data-value="log">Registros</button>
+                        <button type="button" data-value="background">Ocultar todo</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Derecha: el propio launcher, mantenimiento y ayuda -->
+        <div class="set-col">
+            <h2 class="set-head">Launcher y ayuda</h2>
+            <section class="card card-flex">
+                <div class="card-grow">
+                    <div class="card-title">Rendimiento del launcher</div>
+                    <div class="card-sub perf-sub"></div>
+                </div>
+                <div class="seg seg-small seg-perf" role="radiogroup" aria-label="Rendimiento del launcher">
+                    <button type="button" role="radio" data-value="full">Completo</button>
+                    <button type="button" role="radio" data-value="light">Ligero</button>
+                </div>
+            </section>
+
+            <section class="card card-flex">
+                <div class="card-grow">
+                    <div class="card-title">Carpeta de instalación</div>
+                    <div class="card-sub install-dir-text">…</div>
+                </div>
+                <div class="card-actions"><button type="button" class="btn install-dir-change">Cambiar</button></div>
+            </section>
+
+            <section class="card card-maint">
+                <div class="card-title">Mantenimiento</div>
+                <div class="opt">
+                    <div class="opt-text">
+                        <div class="opt-title">Reparar archivos</div>
+                        <div class="card-sub">Vuelve a descargar lo que falte o esté dañado.</div>
+                    </div>
+                    <button type="button" class="btn act-repair">Reparar</button>
+                </div>
+                <div class="opt opt-last">
+                    <div class="opt-text">
+                        <div class="opt-title">Restablecer ajustes</div>
+                        <div class="card-sub">Todos los ajustes vuelven a lo recomendado.</div>
+                    </div>
+                    <button type="button" class="btn act-reset">Restablecer</button>
+                </div>
+            </section>
+
+            <section class="card card-support">
+                <div class="card-row"><div class="card-title">Soporte</div><div class="card-sub set-version">Versión <span class="launcher-version"></span></div></div>
+                <div class="card-sub">Si algo falla, crea un informe y adjúntalo en tu ticket de Discord para que el staff te ayude.</div>
+                <div class="card-actions">
+                    <button type="button" class="btn open-registro">Ver registros</button>
+                    <button type="button" class="btn send-log">Crear informe para soporte</button>
+                    <button type="button" class="btn act-open">Carpeta del juego</button>
+                    <button type="button" class="btn open-tickets">Abrir ticket</button>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

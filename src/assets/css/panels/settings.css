@@ -1,0 +1,214 @@
+/* Ajustes: tarjetas en dos columnas (tokens de diseno) */
+.settings .container {
+    height: 100%;
+    box-sizing: border-box;
+    padding: 16px var(--pa-margin);
+    display: flex;
+    flex-direction: column;
+    justify-content: safe center;     /* el bloque queda centrado en el hueco libre; si no cabe, se desplaza desde arriba */
+    overflow-y: auto;
+}
+
+/* Dos columnas por tema: "Juego" y "Launcher y ayuda". Terminan a la misma altura y la diferencia se reparte entre sus
+   tarjetas, sin dejar el hueco en una sola. */
+.set-grid { display: flex; gap: 22px; align-items: stretch; width: 100%; max-width: 1180px; margin: 0 auto; flex: none; }
+.set-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.set-head { margin: 0 0 0 4px; font-size: 13px; font-weight: 600; color: var(--pa-accent-light); letter-spacing: .02em; text-shadow: 0 1px 8px rgba(5, 3, 18, .9); }
+.settings .set-col > .card { flex: 1 0 auto; justify-content: center; }
+.settings .set-col > .card-flex { justify-content: space-between; }
+
+.settings .card {
+    background: var(--pa-panel);
+    border: 1px solid var(--pa-line);
+    border-radius: 16px;
+    padding: 12px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.settings .card-flex { flex-direction: row; align-items: center; justify-content: space-between; gap: 16px; }
+.card-grow { flex: 1; min-width: 0; }
+.card-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.card-title { font-size: 15px; font-weight: 600; }
+.card-sub { font-size: 12px; color: var(--pa-muted); line-height: 1.4; margin-top: 2px; }
+.card-sub:empty { display: none; }
+.install-dir-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-actions { display: flex; gap: 10px; flex: none; }
+.card-actions.col { flex-direction: column; }
+.ram-value { font-size: 15px; font-weight: 700; color: var(--pa-accent-light); }
+
+.settings .btn {
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--pa-text);
+    background: var(--pa-panel-2);
+    border: 1px solid var(--pa-line);
+    border-radius: 10px;
+    height: 36px;
+    padding: 0 20px;
+    cursor: pointer;
+}
+.settings .btn:hover { border-color: var(--pa-accent); }
+.settings .btn.primary { background: var(--pa-accent-strong); border-color: var(--pa-accent-light); }
+
+/* Controles segmentados */
+.seg { display: flex; border: 1px solid var(--pa-line); border-radius: 10px; overflow: hidden; background: var(--pa-bg); flex: none; }
+.seg button { flex: 1; font: inherit; font-size: 13px; color: var(--pa-muted); background: none; border: 0; height: 38px; padding: 0 16px; cursor: pointer; }
+.seg button.on { background: var(--pa-accent-strong); color: #fff; font-weight: 600; }
+.seg-small button { height: 36px; white-space: nowrap; }
+
+.opt { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 4px 0 12px; border-bottom: 1px solid var(--pa-line); }
+.opt-last { border-bottom: 0; padding-bottom: 0; }
+.opt-title { font-size: 14px; font-weight: 600; }
+
+/* Pasos, resolucion */
+.settings input[type=number] {
+    width: 56px; height: 36px; box-sizing: border-box; text-align: center;
+    font: inherit; font-size: 13px; color: var(--pa-text);
+    background: var(--pa-panel-2); border: 1px solid var(--pa-line); border-radius: 10px;
+    -moz-appearance: textfield;
+}
+.settings input[type=number]:focus { outline: none; border-color: var(--pa-accent); }
+.settings input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+.res { display: flex; align-items: center; gap: 10px; color: var(--pa-muted); }
+.res .input-resolution { width: 76px; }
+
+/* Memoria: barra con topes en los valores permitidos. La marca recomendada va bajo la barra. */
+.ram-slider { --thumb: 22px; --track: 10px; position: relative; padding: 2px 0 0; }
+.ram-range {
+    -webkit-appearance: none; appearance: none; display: block; width: 100%; height: var(--thumb); margin: 0; padding: 0;
+    background: none; cursor: pointer; --f: 0;
+}
+.ram-range::-webkit-slider-runnable-track {
+    box-sizing: border-box; height: var(--track); border-radius: 6px; border: 1px solid var(--pa-line);
+    background:
+        linear-gradient(90deg, var(--pa-accent-strong), var(--pa-accent)) 0 0 / calc(var(--thumb) / 2 + (100% - var(--thumb)) * var(--f)) 100% no-repeat,
+        var(--pa-bg);
+}
+.ram-range::-webkit-slider-thumb {
+    -webkit-appearance: none; box-sizing: border-box; width: var(--thumb); height: var(--thumb); margin-top: calc((var(--track) - var(--thumb)) / 2);
+    border-radius: 8px; background: var(--pa-accent-strong); border: 1px solid var(--pa-accent-light);
+    box-shadow: 0 2px 8px rgba(3, 1, 14, .5);
+    transition: transform .15s cubic-bezier(.16, 1, .3, 1), background-color .15s;
+}
+.ram-range:hover::-webkit-slider-thumb { background: var(--pa-accent); }
+.ram-range:active::-webkit-slider-thumb { transform: scale(1.08); }
+.ram-range:focus-visible { outline: none; }
+.ram-range:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--pa-accent-light); outline-offset: 2px; }
+/* Numeros: su centro coincide con el centro del tirador en cada tope */
+.ram-ticks { position: relative; height: 22px; margin: 4px calc(var(--thumb, 22px) / 2) 0; }
+.ram-ticks .tick {
+    position: absolute; left: calc(var(--f) * 100%); top: 0; transform: translateX(-50%); padding: 0 4px; border: 0; background: none;
+    font: inherit; font-size: 12px; line-height: 16px; color: var(--pa-muted); cursor: pointer; white-space: nowrap;
+}
+.ram-ticks .tick:hover { color: var(--pa-text); }
+.ram-ticks .tick.on { color: #fff; font-weight: 700; }
+.ram-ticks .tick.rec::after { content: ''; position: absolute; left: 50%; bottom: -5px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--pa-accent-light); }
+.settings .seg button:focus-visible, .settings .btn:focus-visible { outline: 2px solid var(--pa-accent-light); outline-offset: -2px; }
+
+/* Mantenimiento: filas con texto a la izquierda y boton a la derecha (mismo ancho para alinear) */
+.opt-text { min-width: 0; }
+.opt > .btn { flex: none; min-width: 116px; padding: 0 16px; }
+.settings .btn.danger { background: var(--pa-error-bg); border-color: var(--pa-error); color: #fff; }
+.settings .btn:disabled { opacity: .6; cursor: default; }
+
+/* Los avisos de Ajustes usan el aviso global (.pca-toast en launcher.css). */
+
+/* La version vive en la tarjeta de Soporte (dato fijo, no la tapan los avisos) */
+.set-version { margin-top: 0; }
+
+/* Mantenimiento: filas algo mas juntas para que la columna izquierda no pegue con la barra inferior */
+.card-maint .opt { padding: 2px 0 8px; }
+.card-maint .opt-last { padding-bottom: 0; }
+
+/* Ventana baja (980x552): tarjetas y botones mas compactos para que quepa mas sin scroll */
+@media (max-height: 640px) {
+    .set-col { gap: 8px; }
+    .settings .card { padding: 9px 16px; gap: 6px; }
+    .settings .btn { height: 32px; font-size: 12.5px; }
+    .seg button, .seg-small button { height: 32px; }
+    .opt { padding: 2px 0 8px; }
+    .card-sub { font-size: 11.5px; line-height: 1.3; }
+    .card-actions.col { gap: 6px; }
+}
+
+/* Soporte: texto arriba y los tres botones en una fila, para igualar la altura de las dos columnas */
+.card-support .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.card-support .card-actions .btn { min-width: 0; padding: 0 10px; white-space: nowrap; }
+
+/* Pulido: titulos de tarjeta algo mas grandes, botones de accion del mismo ancho y "Restablecer" discreto */
+.settings .card-title { font-size: 16px; }
+.opt > .btn { width: 124px; min-width: 124px; }
+.settings .btn.act-reset { background: transparent; color: var(--pa-muted); }
+.settings .btn.act-reset:hover { color: var(--pa-text); border-color: var(--pa-error); }
+/* La barra inferior ya queda FUERA del panel (el panel termina donde ella empieza): no hace falta reservarle espacio.
+   Antes habia 84 px de margen en ventanas bajas que solo obligaban a desplazar mas. */
+
+/* Ventana baja (portatiles de 1366x768 al 125 % dan 614 px; el minimo de la ventana es 552 px): aun mas compacto.
+   A 614 px ya cabe sin desplazar; a 552 px sigue sin caber del todo (hay que bajar unos 80 px), pero se reduce lo que hay que bajar. */
+@media (max-height: 640px) {
+    .settings .container { padding-top: 10px; padding-bottom: 12px; }
+    .set-col { gap: 6px; }
+    .settings .card { padding: 7px 14px; gap: 4px; }
+    .settings .card-title { font-size: 15px; }
+    .settings .btn, .seg button, .seg-small button { height: 30px; }
+    .ram-ticks { height: 18px; margin-top: 2px; }
+    .ram-slider { padding: 0; }
+    .card-sub { margin-top: 0; }
+    .opt { padding: 1px 0 6px; }
+}
+
+/* Ventana estrecha (980 px): controles mas justos para que los titulos no se partan */
+@media (max-width: 1100px) {
+    .set-grid { gap: 14px; }
+    .opt { gap: 10px; }
+    .opt-title { white-space: nowrap; }
+    .seg button { padding: 0 11px; font-size: 12px; }
+    .settings .btn { padding: 0 12px; }
+    .opt > div:first-child { min-width: 0; }
+}
+
+/* "Reiniciar ahora" dentro del texto de Rendimiento: va en la misma linea, sin cambiar la altura de la tarjeta */
+.perf-relaunch { font: inherit; font-weight: 600; color: var(--pa-accent-light); background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; }
+.perf-relaunch:hover { color: #fff; }
+
+/* Ventanas bajas (hasta 620 px de alto, p. ej. el minimo 980 x 552): se compactan los espacios para que quepa todo sin scroll y sin quitar nada.
+   Solo cambian paddings, separaciones y alto de controles; los textos y los botones son los mismos. */
+@media (max-height: 620px) {
+    .settings .container { padding-top: 8px; }
+    .set-col { gap: 5px; }
+    .settings .card { padding: 6px 14px; gap: 4px; }
+    .settings .btn, .settings input[type=number] { height: 30px; }
+    .settings .btn { padding: 0 12px; }
+    .opt { padding: 2px 0 6px; }
+    .opt-last { padding-bottom: 0; }
+    .card-sub { line-height: 1.3; margin-top: 0; }
+    body .settings .seg button { height: 28px; }
+}
+
+/* ---- Ventana estrecha: menos margen lateral para que los textos no se partan ---- */
+@media (max-width: 1100px) {
+    .settings .container { padding-left: 26px; padding-right: 26px; }
+}
+
+/* ---- Ventana minima (980 x 552) y alturas parecidas: todo cabe sin desplazar y sin quitar nada ---- */
+@media (max-height: 620px) {
+    .settings .container { padding-top: 6px; padding-bottom: 6px; }
+    .set-head { display: none; }
+    .set-col { gap: 5px; }
+    .settings .set-grid .card { padding: 5px 14px; gap: 3px; }
+    .settings .set-grid .card-title { font-size: 14px; }
+    .settings .set-grid .opt-title { font-size: 13px; }
+    .settings .set-grid .card-sub { font-size: 11px; line-height: 1.25; }
+    .settings .set-grid .btn,
+    .settings .set-grid input[type=number],
+    .settings .set-grid .seg button { height: 27px; font-size: 12px; }
+    .settings .set-grid .opt { padding: 1px 0 4px; }
+    .settings .set-grid .opt-last { padding-bottom: 0; }
+    .settings .set-grid .ram-slider { --thumb: 18px; }
+    .settings .set-grid .card-support .card-actions { gap: 5px; }       /* dos columnas: ningun texto se corta */
+    .settings .set-grid .card-support .card-actions .btn { padding: 0 4px; }
+}
+
+/* En ventanas grandes crece toda la interfaz (core/uiscale.js): aqui no hace falta nada propio. */

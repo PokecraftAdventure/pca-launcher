@@ -1,0 +1,93 @@
+/*
+ * Pokecraft Adventure Launcher
+ * Pestana "Tienda": marco, navegacion, modo inmersivo y lengüetas. Usa los tokens y el cristal del launcher (glass.css).
+ * La web de la tienda va en una vista nativa aparte (windows/storeView.js); esta hoja solo pinta lo del launcher.
+ */
+:root { --st-ease: cubic-bezier(.22, 1, .36, 1); --st-ms: 200ms; --st-nav-h: 48px; --st-top: 66px; }
+
+/* ---- modo vertical (tienda abierta): marca solo con logo; la barra de abajo se queda solo con JUGAR, centrado ---- */
+body.store-open .brand { font-size: 0; padding-right: 8px }
+body.store-open .brand span { display: none }
+body.store-open .bottombar { justify-content: center }
+body.store-open .bottombar .bar-right,
+body.store-open .bottombar .bar-mid { display: none }
+/* lo que hay debajo (pantalla anterior, 3D...) no debe verse a traves del cristal de las barras */
+body.store-open .panels { visibility: hidden }
+
+/* ---- capa de la tienda (marco + navegacion) ---- */
+#store-layer { position: fixed; z-index: 5; display: flex; flex-direction: column; box-sizing: border-box; overflow: hidden;
+               background: var(--g1-fill); border: 1px solid var(--edge); border-radius: var(--r-lg) var(--r-lg) 0 0; box-shadow: var(--spec), var(--drop-1) }
+#store-layer[hidden] { display: none }
+.st-slot { flex: 1; min-height: 0 }
+
+.st-head { flex: none; height: var(--st-nav-h); box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 8px; border-bottom: 1px solid var(--edge) }
+.st-b { height: 34px; min-width: 34px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        border: 1px solid var(--edge); border-radius: var(--r-md); background: var(--g2-fill); box-shadow: var(--spec-soft), var(--drop-2);
+        color: var(--pa-text); font: inherit; font-size: 13px; cursor: pointer }
+.st-b.st-ico { padding: 0; width: 34px }
+.st-b svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none }
+.st-b:hover:not(:disabled) { background: var(--g2-fill-hover); border-color: var(--edge-strong) }
+.st-b:focus-visible { outline: 2px solid var(--pa-accent-light, #b794ff); outline-offset: 2px }
+.st-b:disabled { opacity: .35; cursor: default }
+
+.st-title { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; overflow: hidden }
+.st-title b { font-weight: 600; font-size: 14px }
+.st-title small { font-size: 12px; color: var(--pa-muted, rgba(236, 232, 247, .6)); overflow: hidden; text-overflow: ellipsis }
+.st-lock { display: grid; place-items: center; color: var(--pa-ok, #7ee2a8) }
+.st-lock svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+.offline .st-lock { color: var(--pa-muted, #9d93b8) }
+.st-spin { flex: none; width: 14px; height: 14px; border: 2px solid var(--edge); border-top-color: var(--pa-accent-light, #b794ff); border-radius: 50%; animation: st-r .8s linear infinite; visibility: hidden }
+#store-layer.loading .st-spin { visibility: visible }
+@keyframes st-r { to { transform: rotate(360deg) } }
+@media (max-width: 860px) { .st-title small { display: none } }
+
+/* ---- inmersivo: la pagina ocupa casi todo; cabecera, navegacion y JUGAR salen al pasar el raton por el borde ---- */
+body.store-immersive #store-layer { visibility: hidden; background: none; border: 0; box-shadow: none }
+/* Ocultas de verdad (visibility) cuando no se muestran: ni se ven ni reciben foco con el teclado. La visibilidad cambia
+   al final de la salida y al principio de la entrada para no cortar la animacion. */
+body.store-immersive .st-head { position: fixed; z-index: 8; left: 20px; right: 20px; top: calc(var(--st-top) + 2px);
+        border: 1px solid var(--edge); border-radius: var(--r-lg); background: var(--g1-fill); -webkit-backdrop-filter: var(--g1-blur); backdrop-filter: var(--g1-blur);
+        box-shadow: var(--spec), var(--drop-1); opacity: 0; transform: translateY(-160px); pointer-events: none; visibility: hidden;
+        transition: transform var(--st-ms) var(--st-ease), opacity var(--st-ms) var(--st-ease), visibility 0s linear var(--st-ms) }
+body.store-immersive.reveal-top .st-head { opacity: 1; transform: none; pointer-events: auto; visibility: visible;
+        transition: transform var(--st-ms) var(--st-ease), opacity var(--st-ms) var(--st-ease), visibility 0s }
+
+body.store-immersive .topbar { position: fixed; left: 0; right: 0; top: 0; z-index: 8; transform: translateY(-130%); pointer-events: none; visibility: hidden;
+        transition: transform var(--st-ms) var(--st-ease), visibility 0s linear var(--st-ms) }
+body.store-immersive.reveal-top .topbar { transform: none; pointer-events: auto; visibility: visible; transition: transform var(--st-ms) var(--st-ease), visibility 0s }
+body.store-immersive .bottombar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 8; transform: translateY(calc(100% + 24px)); pointer-events: none; visibility: hidden;
+        transition: transform var(--st-ms) var(--st-ease), visibility 0s linear var(--st-ms) }
+body.store-immersive.reveal-bottom .bottombar { transform: none; pointer-events: auto; visibility: visible; transition: transform var(--st-ms) var(--st-ease), visibility 0s }
+/* botones de ventana: solo cuando se muestra la cabecera */
+body.store-immersive .other .frame { transition: opacity var(--st-ms) var(--st-ease) }
+body.store-immersive:not(.reveal-top) .other .frame { opacity: 0; pointer-events: none }
+
+/* ---- lengüetas: una pastilla con etiqueta en cada franja; dicen que hay detras y no se confunden con la pagina ---- */
+.st-hint { position: fixed; left: 0; right: 0; z-index: 9; height: 28px; display: flex; align-items: center; justify-content: center; pointer-events: none;
+           opacity: 0; transition: opacity var(--st-ms) var(--st-ease) }
+.st-hint-top { top: 0 } .st-hint-bottom { bottom: 0 }
+.st-pill { position: relative; overflow: hidden; max-width: 460px; height: 22px; padding: 0 12px 0 14px; display: inline-flex; align-items: center; gap: 6px; box-sizing: border-box;
+           border: 1px solid var(--edge); border-radius: 14px; background: var(--g2-fill); box-shadow: var(--spec-soft);
+           color: var(--pa-text); font-size: 12px; font-weight: 500; letter-spacing: .02em }
+.st-pill svg { width: 14px; height: 14px; fill: none; stroke: var(--pa-accent-light, #b794ff); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+.st-hint-bottom .st-pill svg:first-child { fill: var(--pa-accent-light, #b794ff); stroke: none; width: 12px; height: 12px }
+/* estados de JUGAR en la lengüeta de abajo: mismos colores que el boton en Inicio */
+.st-pill .st-txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.st-pill.busy { background: rgba(106, 51, 216, .42); border-color: rgba(183, 148, 255, .45); color: #e9ddff }
+.st-pill.ingame { border-color: color-mix(in srgb, var(--pa-ok, #7ee2a8) 55%, transparent); color: var(--pa-ok, #7ee2a8) }
+.st-pill.warn { border-color: color-mix(in srgb, var(--pa-warn, #f0b35a) 55%, transparent); color: var(--pa-warn, #f0b35a) }
+.st-pill .dots { width: 1.3em }
+.st-prog { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--pa-accent-light, #b794ff); transition: width .3s var(--st-ease) }
+.st-prog.ind { width: 35%; animation: pa-bar-slide 1.3s ease-in-out infinite }
+body.store-immersive .st-hint { opacity: 1 }
+body.store-immersive.reveal-top .st-hint-top, body.store-immersive.reveal-bottom .st-hint-bottom { opacity: 0 }
+/* al entrar en inmersivo las lengüetas aparecen una vez, con un pequeno movimiento hacia su borde */
+body.store-immersive .st-hint-top .st-pill { animation: st-pill-in-top .7s var(--st-ease) .3s 1 both }
+body.store-immersive .st-hint-bottom .st-pill { animation: st-pill-in-bottom .7s var(--st-ease) .3s 1 both }
+@keyframes st-pill-in-top { from { opacity: 0; transform: translateY(-10px) } to { opacity: 1; transform: none } }
+@keyframes st-pill-in-bottom { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
+@media (prefers-reduced-motion: reduce) {
+  .st-prog.ind { animation: none; width: 100%; opacity: .5 }
+  body.store-immersive .st-pill { animation: none }
+}
+body.lite .st-head { -webkit-backdrop-filter: none; backdrop-filter: none }

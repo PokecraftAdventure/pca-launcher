@@ -1,0 +1,59 @@
+/*
+ * Copia de design/tokens.css (fuente de verdad: Proyectos/Launcher/design/tokens.css).
+ * Si cambias un valor, cambialo en los dos archivos.
+ */
+:root {
+  /* Superficies */
+  --pa-bg: #0b0916;          /* fondo base, barras */
+  --pa-panel: #131023;       /* tarjetas */
+  --pa-panel-2: #1b1730;     /* botones secundarios, campos, chips */
+  --pa-line: #2a2250;        /* bordes y separadores */
+  --pa-scene: #2b1f5c;       /* miniaturas, fondo del paisaje (arriba) */
+
+  /* Acento */
+  --pa-accent: #8b5cf6;      /* barras de progreso, bordes activos */
+  --pa-accent-strong: #6a33d8; /* boton principal, opcion elegida */
+  --pa-accent-light: #b794ff;  /* etiquetas, enlaces, iconos */
+
+  /* Texto */
+  --pa-text: #f1ecff;
+  --pa-muted: #cbc4ee;
+
+  /* Estados */
+  --pa-ok: #4ade80;          /* en linea, listo, juego en marcha */
+  --pa-warn: #fbbf24;        /* sin conexion, mantenimiento */
+  --pa-error: #f87171;       /* error, cierre inesperado */
+  --pa-error-bg: #8a2a32;    /* boton de crear archivo de registro */
+
+  /* Paisaje de fondo (3 capas) */
+  --pa-land-top: #1a1240;
+  --pa-land-mid: #150e33;
+  --pa-land-front: #0f0a26;
+
+  /* Tipografia */
+  --pa-font: 'Poppins', 'Segoe UI', sans-serif;
+  --pa-fs-title: 26px;       /* titulo de pantalla / noticia destacada */
+  --pa-fs-h2: 20px;
+  --pa-fs-h3: 15px;          /* titulo de tarjeta / fila */
+  --pa-fs-body: 13px;
+  --pa-fs-small: 12px;
+  --pa-fs-micro: 11px;       /* etiquetas en mayusculas, version */
+  --pa-fs-play: 22px;        /* boton JUGAR */
+
+  /* Medidas (ventana 1280 x 720) */
+  --pa-margin: 60px;         /* margen lateral de todas las pantallas */
+  --pa-topbar-h: 64px;
+  --pa-bottombar-h: 104px;
+  --pa-play-w: 270px;
+  --pa-play-h: 60px;
+  --pa-gap: 14px;
+  --pa-radius-card: 14px;
+  --pa-radius-btn: 10px;
+  --pa-radius-chip: 10px;
+  --pa-control-h: 36px;      /* chips, botones secundarios, campos */
+  --pa-control-h-lg: 44px;   /* botones de la fila inferior del registro */
+
+  /* Ventana de arranque (sin marco) */
+  --pa-splash-w: 400px;
+  --pa-splash-h: 500px;
+}

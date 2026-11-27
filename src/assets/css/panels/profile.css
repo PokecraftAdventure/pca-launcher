@@ -1,0 +1,286 @@
+/* Perfil: jugador a la izquierda, skins y datos a la derecha. "Mis cuentas" es una ventana flotante. */
+
+.profile .container {
+    height: 100%;
+    box-sizing: border-box;
+    padding: 26px var(--pa-margin);
+    display: flex;
+    gap: 22px;
+}
+
+.pf-card {
+    flex: none;
+    width: 340px;
+    box-sizing: border-box;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    background: var(--pa-panel);
+    border: 1px solid var(--pa-line);
+    border-radius: 18px;
+}
+.pf-bust-wrap { flex: 1; width: 100%; min-height: 0; display: grid; place-items: center; }
+.pf-bust { max-width: 70%; max-height: 90%; image-rendering: pixelated; }
+.pf-name { width: 100%; font-size: 24px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pf-type { width: 100%; font-size: 12px; color: var(--pa-muted); min-height: 18px; }
+
+.pf-right { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.pf-head { display: flex; align-items: center; gap: 16px; height: 40px; flex: none; }
+.pf-head .pf-title { flex: none; }
+.pf-head .pf-add { margin-left: auto; flex: none; }
+.pf-title { font-size: 18px; font-weight: 700; }
+/* Alto fijo y moderado: las tarjetas no se estiran con la ventana ni cambian con el aviso */
+/* Ocupan el espacio entre el aviso y el pie; las tarjetas tienen un alto maximo y quedan centradas ahi */
+.pf-skins { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
+.pf-right .pf-foot { margin-top: auto; }
+
+.pf-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.pf-stats { display: flex; gap: 32px; }
+.pf-stats > div { display: flex; flex-direction: column; gap: 2px; }
+.pf-label { font-size: 12px; color: var(--pa-muted); }
+.pf-stats b { font-size: 15px; }
+.pf-actions { display: flex; gap: 12px; }
+
+.pf-btn {
+    font: inherit; font-size: 13px; font-weight: 600; color: var(--pa-text);
+    height: 40px; padding: 0 20px; cursor: pointer;
+    background: var(--pa-panel); border: 1px solid var(--pa-line); border-radius: 10px;
+}
+.pf-btn:hover { border-color: var(--pa-accent); }
+
+/* ---------- Mis cuentas (ventana flotante) ---------- */
+.acc-modal {
+    position: fixed; inset: 0; z-index: 50;
+    display: none; align-items: center; justify-content: center;
+    background: rgba(5, 4, 12, .72);
+}
+.acc-modal.open { display: flex; }.acc-box {
+    position: relative; width: 640px; max-width: calc(100% - 48px); max-height: calc(100% - 48px);
+    box-sizing: border-box; padding: 32px; overflow-y: auto;
+    background: var(--pa-panel); border: 1px solid var(--pa-line); border-radius: 20px;
+}
+.acc-x {
+    position: absolute; top: 20px; right: 20px; width: 34px; height: 34px;
+    font-size: 20px; line-height: 1; color: var(--pa-text); cursor: pointer;
+    background: var(--pa-bg); border: 1px solid var(--pa-line); border-radius: 50%;
+}
+.acc-title { font-size: 22px; font-weight: 700; }
+.acc-sub { margin-top: 4px; font-size: 12px; color: var(--pa-muted); }
+.accounts-list { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; }
+.acc-note { margin-top: 18px; font-size: 12px; color: var(--pa-muted); }
+.acc-foot { margin-top: 14px; display: flex; justify-content: flex-end; }
+
+.account {
+    box-sizing: border-box; min-height: 72px; padding: 12px 16px;
+    display: flex; align-items: center; gap: 14px;
+    background: var(--pa-panel-2); border: 1px solid var(--pa-line); border-radius: 14px;
+}
+.account.account-select { border-color: var(--pa-accent); box-shadow: 0 0 0 1px var(--pa-accent) inset; }
+.accounts-list .add { justify-content: center; border-style: dashed; background: transparent; color: var(--pa-accent-light); cursor: pointer; font-weight: 600; }
+.accounts-list .add:hover { border-color: var(--pa-accent); }
+.add-plus { font-size: 22px; line-height: 1; pointer-events: none; }
+.add-text-profile { font-size: 14px; pointer-events: none; }
+
+.profile-image {
+    flex: none; width: 44px; height: 44px;
+    background: url(../../images/default/setve.png) center/cover;
+    border-radius: 10px; image-rendering: pixelated; pointer-events: none;
+}
+.profile-infos { flex: 1; min-width: 0; pointer-events: none; }
+.profile-pseudo { font-size: 15px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.badges { margin-top: 4px; display: flex; gap: 6px; }
+.badge { font-size: 10px; font-weight: 700; letter-spacing: .06em; padding: 2px 8px; border-radius: 6px; color: var(--pa-accent-light); background: rgba(139, 92, 246, .16); border: 1px solid rgba(139, 92, 246, .4); }
+.badge.use { display: none; color: var(--pa-ok); background: rgba(74, 222, 128, .12); border-color: rgba(74, 222, 128, .45); }
+.account-select .badge.use { display: inline-block; }
+.acc-actions { display: flex; gap: 10px; }
+.acc-actions button {
+    font: inherit; font-size: 13px; font-weight: 600; color: var(--pa-text); height: 36px; padding: 0 18px; cursor: pointer;
+    background: var(--pa-panel); border: 1px solid var(--pa-line); border-radius: 10px;
+}
+.acc-actions button:hover { border-color: var(--pa-accent); }
+.account-select .use-profile { display: none; }
+
+.pf-empty { flex: 1; background: var(--pa-panel); border-style: dashed; }
+.pf-empty[hidden], .pf-grid[hidden] { display: none; }
+/* El espacio del aviso siempre existe: oculto solo se vuelve invisible, nada cambia de lugar ni de alto */
+.pf-msg[hidden] { display: flex; visibility: hidden; }
+
+/* ---------- Mis skins ---------- */
+.pf-title { margin: 0; }
+.pf-add { background: var(--pa-accent-strong); border-color: var(--pa-accent-light); color: #fff; }
+.pf-add:hover { border-color: #fff; }
+.pf-btn:focus-visible, .sk-card:focus-visible { outline: 2px solid var(--pa-accent-light); outline-offset: 2px; }
+
+.pf-msg {
+    margin: -4px 0 0; flex: none; min-width: 0; min-height: 38px; box-sizing: border-box; padding: 6px 14px;
+    display: flex; align-items: center; font-size: 12px; line-height: 1.3;
+    color: var(--pa-text); background: var(--pa-panel-2);
+    border: 1px solid var(--pa-error); border-radius: 10px;
+}
+.pf-msg-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.pf-msg.ok { border-color: var(--pa-ok); }
+
+/* Hasta 5 tarjetas visibles; si hay más, la fila se recorre hacia el lado */
+.pf-grid {
+    --sk-gap: 12px;
+    flex: 0 1 auto; height: 300px; max-height: 100%; min-height: 0;
+    display: grid; grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 4 * var(--sk-gap)) / 5);
+    grid-template-rows: minmax(0, 1fr);
+    gap: var(--sk-gap);
+    overflow-x: auto; overflow-y: hidden;
+    padding: 3px 3px 12px; margin: -3px -3px 0;
+    scroll-snap-type: x proximity; scroll-padding: 3px;
+}
+.pf-grid::-webkit-scrollbar { height: 8px; }
+.pf-grid::-webkit-scrollbar-thumb { background: var(--pa-line); border-radius: 6px; }
+.pf-grid::-webkit-scrollbar-thumb:hover { background: var(--pa-accent); }
+
+/* Envoltorio de cada skin: la tarjeta (elegir) y el boton de eliminar son botones hermanos */
+.sk-item { position: relative; display: flex; min-width: 0; min-height: 0; scroll-snap-align: start; }
+.sk-item > .sk-card { flex: 1; }
+.sk-del {
+    position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; border-radius: 50%;
+    display: grid; place-items: center; cursor: pointer; padding: 0; color: var(--pa-text);
+    background: var(--pa-panel-2); border: 1px solid var(--pa-line);
+    opacity: 0; transition: opacity .18s cubic-bezier(.16, 1, .3, 1), border-color .18s cubic-bezier(.16, 1, .3, 1), color .18s;
+}
+.sk-del svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.sk-item:hover .sk-del, .sk-item:focus-within .sk-del { opacity: 1; }
+.sk-del:hover { color: var(--pa-error); border-color: var(--pa-error); }
+.sk-del.locked { cursor: not-allowed; color: var(--pa-muted); }
+.sk-del.locked:hover { color: var(--pa-muted); border-color: var(--pa-line); }
+.sk-item:hover .sk-del.locked, .sk-item:focus-within .sk-del.locked { opacity: .55; }
+.sk-del:focus-visible, .sk-confirm button:focus-visible { outline: 2px solid var(--pa-accent-light); outline-offset: 2px; }
+@media (hover: none) { .sk-del { opacity: 1; } }
+.sk-confirm {
+    position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 8px;
+    padding: 14px; text-align: center; background: var(--pa-panel); border: 1px solid var(--pa-error); border-radius: 16px;
+}
+.sk-confirm p { margin: 0 0 4px; font-size: 13px; font-weight: 700; }
+.sk-confirm button {
+    font: inherit; font-size: 12px; font-weight: 600; height: 34px; cursor: pointer; color: var(--pa-text);
+    background: var(--pa-panel); border: 1px solid var(--pa-line); border-radius: 10px;
+}
+.sk-confirm .sk-yes { background: var(--pa-error-bg); border-color: var(--pa-error); color: #fff; }
+.sk-confirm button:hover { border-color: var(--pa-accent); }
+.sk-confirm .sk-yes:hover { border-color: #fff; }
+
+.sk-card {
+    font: inherit; color: var(--pa-text); text-align: left; cursor: pointer;
+    scroll-snap-align: start; min-width: 0; min-height: 0;
+    display: flex; flex-direction: column; padding: 8px 8px 12px; gap: 10px;
+    background: var(--pa-panel); border: 1px solid var(--pa-line); border-radius: 16px;
+    transition: border-color .18s cubic-bezier(.16, 1, .3, 1), background-color .18s cubic-bezier(.16, 1, .3, 1);
+}
+.sk-card:hover { border-color: var(--pa-accent); }
+.sk-prev {
+    flex: 1; min-height: 0; display: grid; place-items: center; padding: 8px 0;
+    background: var(--pa-scene); border-radius: 10px; overflow: hidden;
+}
+.sk-prev img { height: 100%; max-width: 100%; object-fit: contain; }
+.sk-info { flex: none; padding: 0 4px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sk-name { font-size: 13px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sk-use { height: 16px; font-size: 11px; font-weight: 700; color: var(--pa-ok); }
+.sk-use::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: var(--pa-ok); vertical-align: 1px; }
+.sk-use.off { visibility: hidden; }
+
+@media (max-width: 1100px) {
+    .pf-card { width: 250px; padding: 16px; }
+    .profile .container { gap: 16px; }
+    .pf-grid { --sk-gap: 8px; }
+    .sk-card { padding: 6px 6px 10px; }
+    .sk-name { font-size: 12px; }
+}
+
+.pf-bust-wrap { position: relative; }
+.pf-canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; }
+.pf-bust-wrap { overflow: hidden; }
+
+/* Pantallas pequenas: los datos y los botones se acomodan en dos filas */
+.pf-stats b, .pf-label, .pf-btn { white-space: nowrap; }
+.pf-foot { flex-wrap: wrap; }
+@media (max-height: 640px) {
+    .profile .container { padding-top: 16px; padding-bottom: 14px; }
+    .pf-card { padding: 16px; }
+}
+
+/* Skin pendiente: se aplica al entrar al servidor */
+.sk-card.pend { border: 2px solid var(--pa-accent-light); padding: 7px 7px 11px; }
+.sk-use.pend { color: var(--pa-accent-light); }
+.sk-use.pend::before { background: var(--pa-accent-light); }
+
+/* ---------- Animaciones del personaje: boton + menu que se oculta ---------- */
+/* La tarjeta tiene desenfoque de cristal (crea su propio nivel de apilamiento): sin z-index, el menu .pf-pop que sale a su
+   derecha quedaba DETRAS de las skins (hermanas posteriores con position). Se sube la tarjeta entera por encima de la rejilla. */
+.pf-card { position: relative; z-index: 3; }
+.pf-card svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.pf-fab {
+    position: absolute; right: 16px; bottom: 16px; width: 42px; height: 42px; border-radius: 50%;
+    display: grid; place-items: center; cursor: pointer; color: var(--pa-text);
+    background: var(--pa-panel-2); border: 1px solid var(--pa-line);
+    transition: background-color .18s cubic-bezier(.16, 1, .3, 1), border-color .18s cubic-bezier(.16, 1, .3, 1);
+}
+.pf-fab:hover { border-color: var(--pa-accent); }
+.pf-fab[aria-expanded="true"] { background: var(--pa-accent-strong); border-color: var(--pa-accent-light); color: #fff; }
+.pf-fab:focus-visible, .pf-row:focus-visible { outline: 2px solid var(--pa-accent-light); outline-offset: 2px; }
+.pf-pop {
+    position: absolute; left: calc(100% + 10px); bottom: 16px; z-index: 6; width: 244px; padding: 8px;
+    background: var(--pa-panel-2); border: 1px solid var(--pa-line); border-radius: 14px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .45);
+}
+.pf-pop[hidden] { display: none; }
+.pf-note { margin: 2px 6px 8px; font-size: 12px; line-height: 1.35; color: var(--pa-warn); }
+.pf-note[hidden] { display: none; }
+.pf-row {
+    display: flex; align-items: center; gap: 10px; width: 100%; height: 36px; padding: 0 10px;
+    font: inherit; font-size: 13px; color: var(--pa-text); text-align: left; cursor: pointer;
+    background: none; border: 0; border-radius: 8px;
+}
+.pf-row:hover { background: var(--pa-panel); }
+.pf-row.on { color: #fff; font-weight: 600; }
+.pf-dot { margin-left: auto; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--pa-muted); }
+.pf-row.on .pf-dot { background: var(--pa-accent-light); border-color: var(--pa-accent-light); }
+.pf-hr { border: 0; height: 1px; margin: 6px 4px; background: var(--pa-line); }
+.pf-sw { margin-left: auto; position: relative; width: 34px; height: 20px; border-radius: 10px; background: var(--pa-bg); border: 1px solid var(--pa-line); transition: background-color .18s cubic-bezier(.16, 1, .3, 1); }
+.pf-sw::after { content: ""; position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--pa-muted); transition: transform .18s cubic-bezier(.16, 1, .3, 1), background-color .18s; }
+.pf-spin[aria-checked="true"] .pf-sw { background: var(--pa-accent-strong); border-color: var(--pa-accent-light); }
+.pf-spin[aria-checked="true"] .pf-sw::after { transform: translateX(14px); background: #fff; }
+@media (prefers-reduced-motion: reduce) { .pf-fab, .pf-sw, .pf-sw::after { transition: none; } }
+
+/* ---------- Perfil: biblioteca de skins (2026-11-25) ----------
+   Visor a la izquierda; a la derecha un panel con el titulo, las skins en rejilla (dos filas completas, una en ventanas
+   bajas; el resto se desplaza) y los datos con "Gestionar cuentas" dentro. */
+.profile .container { gap: 18px; }
+.profile .pf-card { width: clamp(250px, 31vw, 440px); }
+.pf-right { position: relative; padding: 18px 20px 16px; gap: 14px; border-radius: 16px; }
+/* El aviso vive en la cabecera, entre el titulo y "Agregar skin": no reserva sitio ni mueve nada */
+.pf-msg, .pf-msg[hidden] { position: absolute; z-index: 4; left: 150px; right: 190px; top: 18px; height: 40px; min-height: 0; margin: 0; }
+.pf-skins { justify-content: flex-start; }
+.pf-grid {
+    grid-auto-flow: row; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); grid-auto-columns: auto;
+    grid-template-rows: none; grid-auto-rows: calc((100% - var(--sk-gap)) / 2);
+    flex: 1; height: auto; max-height: none; align-content: start; overflow-x: hidden; overflow-y: auto;
+    padding: 3px; margin: -3px; scroll-snap-type: y proximity;
+}
+.pf-grid::-webkit-scrollbar { width: 8px; }
+.sk-card { position: relative; gap: 6px; }
+/* La vista de la skin se ve entera, sea cual sea el alto de la tarjeta */
+.sk-prev { position: relative; }
+.sk-prev img { position: absolute; inset: 6px; width: calc(100% - 12px); height: calc(100% - 12px); object-fit: contain; }
+/* "Se aplicara al jugar" va sobre la vista: aparecer no cambia el tamano de nada */
+.sk-use { position: absolute; left: 14px; right: 14px; bottom: 40px; z-index: 1; padding: 2px 6px; border-radius: 6px; background: rgba(11, 9, 22, .85); height: auto; line-height: 1.3; }
+.pf-right .pf-foot { padding-top: 14px; border-top: 1px solid rgba(183, 148, 255, .22); align-items: center; }
+
+@media (max-width: 1100px) {
+    .profile .container { gap: 16px; }
+    .pf-right { padding: 14px 16px 12px; gap: 10px; }
+    .pf-msg, .pf-msg[hidden] { left: 124px; right: 168px; top: 14px; padding: 2px 8px; font-size: 11px; }
+    .pf-stats { gap: 20px; }
+}
+@media (max-height: 640px) {
+    .pf-grid { grid-auto-rows: 100%; }
+}
+

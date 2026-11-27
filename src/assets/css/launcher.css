@@ -1,0 +1,547 @@
+@import 'font.css';
+@import 'tokens.css';
+@import 'theme.css';
+@import 'panels/login.css';
+@import 'panels/install.css';
+@import 'panels/home.css';
+@import 'panels/settings.css';
+@import 'panels/console.css';
+@import 'panels/news.css';
+@import 'panels/profile.css';
+@import 'glass.css';
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    color: var(--pa-text);
+    background: var(--pa-bg);
+    font-family: var(--pa-font);
+    font-weight: 400;
+    overflow: hidden;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/*******************************************************************************
+ * Estructura: barra superior, paneles, barra inferior                         *
+ ******************************************************************************/
+
+.app {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--pa-bg);
+    overflow: hidden;
+}
+
+/* Fondo (utils/background.js): escena + petalos, SIEMPRE detras de toda la interfaz y sin eventos.
+   El velo la oscurece mas en las pantallas con mucho contenido para que el texto se lea. */
+.scene-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.scene-bg canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.scene-veil { position: absolute; inset: 0; background: var(--pa-bg); opacity: 0; transition: opacity .45s cubic-bezier(.16, 1, .3, 1); }
+.scene-motion { transition: opacity .45s cubic-bezier(.16, 1, .3, 1); }
+/* Fondo por imagenes (utils/backdrop.js): una capa por imagen con fundido entre ellas */
+.scene-layer { position: absolute; inset: 0; background-position: center; background-size: cover; background-repeat: no-repeat; opacity: 0; transition: opacity .45s cubic-bezier(.16, 1, .3, 1); }
+.scene-layer.on { opacity: 1; }
+body[data-view="home"] .scene-veil { opacity: .30; }
+body[data-view="news"] .scene-veil { opacity: .42; }
+body[data-view="profile"] .scene-veil { opacity: .50; }
+body[data-view="settings"] .scene-veil { opacity: .56; }
+body[data-view="console"] .scene-veil { opacity: .30; }
+/* Pantallas despejadas: un halo oscuro suave solo detras del texto central */
+body[data-view="login"] .scene-veil { opacity: 1; background: radial-gradient(ellipse 30% 42% at 50% 46%, rgba(11, 9, 22, .5), rgba(11, 9, 22, 0) 100%); }
+body[data-view="install"] .scene-veil { opacity: 1; background: radial-gradient(ellipse 36% 40% at 30% 54%, rgba(11, 9, 22, .5), rgba(11, 9, 22, 0) 100%); }
+body[data-view="home"] .scene-motion,
+body[data-view="news"] .scene-motion,
+body[data-view="profile"] .scene-motion,
+body[data-view="settings"] .scene-motion { opacity: .6; }
+
+.topbar,
+.panels,
+.bottombar {
+    position: relative;
+    z-index: 1;
+}
+
+.topbar {
+    flex: none;
+    display: flex;
+    align-items: flex-end;
+    gap: 64px;
+    height: var(--pa-topbar-h);
+    box-sizing: border-box;
+    padding: 0 130px 0 32px;
+    background: rgba(11, 9, 22, 0.88);
+    border-bottom: 1px solid var(--pa-line);
+}
+
+.brand {
+    align-self: center;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: var(--pa-fs-h2);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+
+.brand span {
+    color: var(--pa-accent-light);
+}
+
+.tabs {
+    display: flex;
+    gap: 34px;
+    align-self: flex-end;
+}
+
+.tab {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 0 0 12px;
+    color: var(--pa-muted);
+    font-size: 14px;
+}
+
+.tab:hover {
+    color: var(--pa-text);
+}
+
+.tab.on {
+    color: #fff;
+    border-bottom-color: var(--pa-accent);
+}
+
+.panels {
+    flex: 1;
+    min-height: 0;
+}
+
+.bottombar {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    height: var(--pa-bottombar-h);
+    box-sizing: border-box;
+    padding: 0 var(--pa-margin);
+    background: rgba(11, 9, 22, 0.94);
+    border-top: 1px solid var(--pa-line);
+}
+
+/* Pantallas a todo el alto (carga, registro, inicio de sesion): sin barras */
+body[data-view="console"] .tabs,
+body[data-view="console"] .bottombar,
+body[data-view="login"] .topbar,
+body[data-view="login"] .bottombar,
+body[data-view="install"] .topbar,
+body[data-view="install"] .bottombar {
+    display: none;
+}
+
+/* Boton JUGAR y su estado */
+.play-instance {
+    position: relative;
+    flex: none;
+}
+
+.play-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: var(--pa-play-w);
+    height: var(--pa-play-h);
+    border: 1px solid var(--pa-accent-light);
+    border-radius: var(--pa-radius-btn);
+    background: var(--pa-accent-strong);
+    color: #fff;
+    font-size: var(--pa-fs-play);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.play-ico {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+}
+
+.play-instance.play-disabled .play-btn {
+    background: var(--pa-panel-2);
+    border-color: var(--pa-line);
+    color: var(--pa-muted);
+    cursor: not-allowed;
+}
+
+.play-instance.play-busy .play-btn {
+    background: rgba(106, 51, 216, 0.35);
+    border-color: rgba(183, 148, 255, 0.4);
+    color: #d9c8ff;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    cursor: default;
+}
+
+.play-instance.play-ingame .play-btn {
+    background: var(--pa-panel-2);
+    border-color: var(--pa-line);
+    color: var(--pa-ok);
+    cursor: default;
+}
+
+.play-instance.play-busy .play-ico,
+.play-instance.play-ingame .play-ico {
+    display: none;
+}
+
+/* Centro de la barra: texto, progreso y cartas */
+.bar-mid {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 7px;
+}
+
+.bar-title {
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.bar-title .bar-pct {
+    color: var(--pa-muted);
+    font-weight: 400;
+}
+
+.bar-title.tone-ok { color: var(--pa-muted); }
+.bar-title.tone-ok b { color: var(--pa-ok); font-weight: 700; margin-right: 6px; }
+.bar-title.tone-warn { color: var(--pa-warn); }
+.bar-title.tone-error { color: var(--pa-error); }
+.bar-title.tone-text { color: var(--pa-text); }
+
+.bar-sub {
+    font-size: var(--pa-fs-small);
+    color: var(--pa-muted);
+}
+
+.bar-progress {
+    height: 8px;
+    max-width: 560px;
+    border-radius: 4px;
+    background: var(--pa-panel-2);
+    border: 1px solid var(--pa-line);
+    overflow: hidden;
+    display: none;
+}
+
+.bar-progress i {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--pa-accent);
+    transition: width 0.2s linear;
+}
+
+.bar-progress.show { display: block; }
+
+/* Sin porcentaje: un tramo que recorre la barra */
+.bar-progress.indeterminate { position: relative; }
+.bar-progress.indeterminate i { position: absolute; top: 0; bottom: 0; left: 0; width: 35%; transition: none; animation: pa-bar-slide 1.3s ease-in-out infinite; }
+@keyframes pa-bar-slide { from { left: -35%; } to { left: 100%; } }
+
+/* Tres puntos que avanzan junto al texto del boton (ancho fijo para que el texto no salte) */
+.dots { display: inline-block; width: 1.3em; text-align: left; }
+.dots::after { content: ''; animation: pa-dots 1.2s infinite step-end; }
+@keyframes pa-dots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } }
+@media (prefers-reduced-motion: reduce) {
+    .dots::after { animation: none; content: '…'; }
+    .bar-progress.indeterminate i { animation: none; width: 100%; left: 0; opacity: .5; }
+}
+
+.bottombar:has(.play-busy) .bar-line { display: block; white-space: normal; }
+
+/* Boton apagado con motivo (utils/lock.js): se ve apagado pero responde con la explicacion */
+[aria-disabled="true"] { opacity: .45 !important; cursor: not-allowed !important; }
+
+.bar-title:empty,
+.bar-sub:empty {
+    display: none;
+}
+
+/* El centro de la barra nunca crece mas que la barra: textos largos se cortan en dos lineas */
+.bar-mid { overflow: hidden; max-height: 100%; }
+.bar-title { max-height: 40px; overflow: hidden; }
+.bar-sub { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.bar-sub:empty { display: none; }       /* despues de la regla anterior: si no, el hueco vacio volveria a verse */
+
+/* Mientras prepara o abre, el sitio del aviso queda reservado: cuando aparezca (a los 10 s) el texto y la barra no saltan */
+.bottombar:has(.play-busy) .bar-sub:empty { display: block; visibility: hidden; height: calc(var(--pa-fs-small) * 1.4); }
+
+/* Ventana estrecha: con botones de registro en la barra (error o juego en marcha) las redes ceden el sitio */
+@media (max-width: 1100px) {
+    .bottombar:has(.bar-btn.show) .social { display: none; }
+    /* el aviso de espera cabe en dos lineas aqui: se reservan las dos */
+    .bottombar:has(.play-busy) .bar-sub:empty { height: calc(var(--pa-fs-small) * 1.4 * 2); }
+    .bottombar { gap: 20px; }
+}
+
+/* "Listo para jugar" y el estado del servidor comparten linea: las lineas de abajo quedan para los mensajes */
+.bar-line { display: flex; align-items: baseline; gap: 14px; min-width: 0; white-space: nowrap; }
+.bar-server { display: none; font-size: var(--pa-fs-small); color: var(--pa-muted); padding-left: 14px; border-left: 1px solid rgba(183, 148, 255, .3); }
+.bar-server.show { display: block; }
+.bar-server b { margin-left: 4px; }
+.info-server.on { color: var(--pa-ok); }          /* verde en linea, rojo sin conexion */
+.info-server.off { color: var(--pa-error); }
+
+.bg-download {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    font-size: var(--pa-fs-small);
+    color: var(--pa-muted);
+}
+
+.bg-download.show { display: flex; }
+
+.mini-progress {
+    width: 240px;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--pa-panel-2);
+    border: 1px solid var(--pa-line);
+    overflow: hidden;
+}
+
+.mini-progress i {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--pa-accent);
+}
+
+.mini-progress.hide { display: none; }
+
+/* Botones secundarios y redes */
+.bar-right {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bar-btn {
+    display: none;
+    align-items: center;
+    height: var(--pa-control-h);
+    padding: 0 16px;
+    border-radius: 9px;
+    border: 1px solid var(--pa-line);
+    background: var(--pa-panel-2);
+    color: var(--pa-text);
+    font-size: var(--pa-fs-body);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.bar-btn.show { display: flex; }
+
+.social {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.soc {
+    height: 40px;
+    border-radius: var(--pa-radius-btn);
+    border: 1px solid var(--pa-line);
+    background: var(--pa-panel-2);
+    color: var(--pa-text);
+    width: 40px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+}
+
+.soc img {
+    width: 20px;
+    height: 20px;
+    filter: var(--svg-color);
+    pointer-events: none;
+}
+
+.soc:hover,
+.bar-btn:hover {
+    border-color: var(--pa-accent);
+}
+
+img {
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+* {
+    outline: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.dragbar {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 26px;
+    -webkit-app-region: drag;
+    z-index: 11;
+}
+
+.other .frame {
+    background: transparent;
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    z-index: 11;
+    -webkit-app-region: no-drag;
+    display: none;
+}
+
+.frame.hide {
+    display: block;
+}
+
+.other .button-frame {
+    position: relative;
+    display: table-cell;
+    width: 30px;
+    height: 26px;
+    transition: color .2s, background-color .2s;
+    color: black;
+    cursor: pointer;
+}
+
+.button-frame:before {
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+    color: #f8f9f9;
+}
+
+.icon-close:hover {
+    background: #e21212;
+}
+
+.icon-minimize:hover,
+.icon-restore-down:hover,
+.icon-maximize:hover {
+    background-color: #0000009d;
+}
+
+.popup {
+    position: absolute;
+    inset: 0;
+    z-index: 70;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-tab {
+    width: min(440px, 86%);
+    box-sizing: border-box;
+    padding: 28px 30px 24px;
+    background: var(--pa-panel);
+    border: 1px solid var(--pa-line);
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+}
+
+.popup-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--pa-text);
+}
+
+.popup-content {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+/* Aviso flotante global: fijo, por encima de paneles, barras y ventanas emergentes; sobre la barra de abajo (56 + 16 de margen),
+   sin tapar su progreso y sin mover nada. */
+.pca-toast {
+    position: fixed; left: 50%; bottom: 88px; transform: translateX(-50%); z-index: 80;
+    max-width: min(640px, calc(100vw - 40px)); box-sizing: border-box; padding: 10px 16px;
+    font-size: 12px; line-height: 1.4; color: var(--pa-text); text-align: center; cursor: pointer;
+    background: var(--pa-panel-2); border: 1px solid var(--pa-ok); border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, .45); pointer-events: auto;
+}
+.pca-toast[hidden] { display: none; }
+.pca-toast.error { border-color: var(--pa-error); }
+.pca-toast-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; word-break: break-word; }
+body[data-view="login"] .pca-toast, body[data-view="install"] .pca-toast, body[data-view="console"] .pca-toast { bottom: 24px; }
+
+.panel {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.active {
+    opacity: 1;
+    z-index: 1;
+    pointer-events: all;
+}
+.brand-logo { height: 40px; width: auto; flex: none; }
+
+/* ===== Modo ligero (Ajustes > Rendimiento del launcher): sin animaciones, sin desenfoque, consumo minimo ===== */
+body.lite *, body.lite *::before, body.lite *::after {
+    animation: none !important;
+    transition: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    scroll-behavior: auto !important;
+}
+/* Unica excepcion: el anillo de carga avanza a saltos (8 por vuelta) para no parecer colgado */
+body.lite .load-ring, body.lite .log-badge.busy { animation: pa-spin-steps 1.2s steps(8) infinite !important; }
+@keyframes pa-spin-steps { to { transform: rotate(360deg); } }
+body.lite .bar-progress.indeterminate i { width: 100%; left: 0; opacity: .5; }
+/* Los puntos de "Preparando..." siguen avanzando (4 pasos cada 1,2 s): es la senal de que hay que esperar */
+body.lite .dots::after { content: ''; animation: pa-dots 1.2s infinite step-end !important; }
+
+/* ===== Barras de desplazamiento con la paleta (antes salian las claras de Windows) ===== */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(160, 120, 255, .30); border-radius: 8px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: rgba(180, 148, 255, .55); border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-corner { background: transparent; }

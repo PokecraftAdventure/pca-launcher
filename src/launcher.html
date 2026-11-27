@@ -1,0 +1,88 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self';">
+        <link rel="stylesheet" href="assets/css/launcher.css">
+        <link rel="stylesheet" href="assets/css/storeview.css">
+    </head>
+    <body>
+        <div class="dragbar"></div>
+        <div class="other">
+            <div class="frame">
+                <div id="minimize" class="button-frame icon-minimize"></div>
+                <div id="maximize" class="button-frame icon-maximize"></div>
+                <div id="close" class="button-frame icon-close"></div>
+            </div>
+        </div>
+
+        <!-- Error que impide jugar (utils/errordialog.js) -->
+        <div class="pca-dialog" role="alertdialog" aria-modal="true" aria-labelledby="pca-dialog-title" aria-describedby="pca-dialog-text" hidden>
+            <div class="pca-dialog-box">
+                <div class="pca-dialog-head">
+                    <span class="pca-dialog-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5 21.5 20h-19zM12 10v4.5M12 17.5v.01"/></svg></span>
+                    <h2 id="pca-dialog-title">No se pudo preparar el juego</h2>
+                </div>
+                <div id="pca-dialog-text">
+                    <p class="pca-dialog-message"></p>
+                    <p class="pca-dialog-help">Soluciona el problema y vuelve a intentarlo.</p>
+                </div>
+                <div class="pca-dialog-actions">
+                    <button type="button" class="btn pca-dialog-log" data-action="log">Crear informe para soporte</button>
+                    <button type="button" class="btn" data-action="close">Cerrar</button>
+                    <button type="button" class="btn primary" data-action="retry">Reintentar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="popup">
+            <div class="popup-tab">
+                <div class="popup-title"></div>
+                <div class="popup-content"></div>
+            </div>
+        </div>
+
+        <div class="app">
+            <header class="topbar">
+                <div class="brand"><img class="brand-logo" src="assets/images/logo.svg" alt="">POKECRAFT <span>ADVENTURE</span></div>
+                <nav class="tabs">
+                    <button class="tab" data-panel="home">Inicio</button>
+                    <button class="tab" data-panel="news">Noticias</button>
+                    <button class="tab" data-panel="store" data-url="https://example.store.link/">Tienda</button>
+                    <button class="tab" data-panel="profile">Perfil</button>
+                    <button class="tab" data-panel="settings">Ajustes</button>
+                </nav>
+            </header>
+
+            <main class="panels"></main>
+
+            <footer class="bottombar">
+                <div class="play-instance">
+                    <button class="play-btn"><svg class="play-ico" viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg><span class="play-label">JUGAR</span></button>
+                </div>
+
+                <div class="bar-mid">
+                    <div class="bar-line">
+                    <div class="bar-title"></div>
+                    <div class="bar-server">Servidor <b class="info-server">Comprobando...</b></div>
+                    </div>
+                    <div class="bar-progress"><i></i></div>
+                    <div class="bar-sub"></div>
+                    <div class="bg-download"><span class="bg-text"></span><div class="mini-progress"><i></i></div></div>
+                </div>
+
+                <div class="bar-right">
+                    <button class="bar-btn bar-create-log">Crear informe para soporte</button>
+                    <button class="bar-btn open-log">Ver registros</button>
+                    <div class="social">
+                        <button class="soc" data-url="https://discord.gg/INVITACION" title="Discord"><img src="assets/images/svgs/discord.svg" alt="Discord"></button>
+                        <button class="soc" data-url="https://www.tiktok.com/" title="TikTok"><img src="assets/images/svgs/tiktok.svg" alt="TikTok"></button>
+                    </div>
+                </div>
+            </footer>
+            <!-- Aviso flotante global: por encima de todo, no ocupa sitio. Solo errores y resultados finales. -->
+            <div class="pca-toast" role="status" aria-live="polite" hidden><span class="pca-toast-text"></span></div>
+        </div>
+        <script src="assets/js/launcher.js" type="module"></script>
+        <script src="assets/js/utils/storeview.js"></script>
+    </body>
+</html>

@@ -1,0 +1,79 @@
+<div class="container">
+    <section class="pf-card">
+        <div class="pf-bust-wrap"><canvas class="pf-canvas"></canvas>
+            <img class="pf-bust" src="assets/images/default/setve.png" alt="" hidden></div>
+        <div class="pf-name">Jugador</div>
+        <div class="pf-type"></div>
+
+        <!-- Animaciones y giro: el boton abre un menu que se oculta cuando no se usa -->
+        <button type="button" class="pf-fab" aria-label="Animaciones del personaje" aria-haspopup="menu" aria-expanded="false" aria-controls="pf-pop">
+            <svg class="i"><use href="#i-motion"/></svg>
+        </button>
+        <div class="pf-pop" id="pf-pop" role="menu" aria-label="Animaciones del personaje" hidden>
+            <p class="pf-note" hidden>Desactivadas en modo Ligero. Actívalas en Ajustes &gt; Rendimiento.</p>
+            <button type="button" class="pf-row" role="menuitemradio" aria-checked="false" data-anim="natural"><svg class="i"><use href="#i-natural"/></svg>Natural<span class="pf-dot"></span></button>
+            <button type="button" class="pf-row on" role="menuitemradio" aria-checked="true" data-anim="walk"><svg class="i"><use href="#i-walk"/></svg>Caminar<span class="pf-dot"></span></button>
+            <button type="button" class="pf-row" role="menuitemradio" aria-checked="false" data-anim="run"><svg class="i"><use href="#i-run"/></svg>Correr<span class="pf-dot"></span></button>
+            <button type="button" class="pf-row" role="menuitemradio" aria-checked="false" data-anim="wave"><svg class="i"><use href="#i-wave"/></svg>Saludar<span class="pf-dot"></span></button>
+            <button type="button" class="pf-row" role="menuitemradio" aria-checked="false" data-anim="crouch"><svg class="i"><use href="#i-crouch"/></svg>Agacharse<span class="pf-dot"></span></button>
+            <button type="button" class="pf-row" role="menuitemradio" aria-checked="false" data-anim="still"><svg class="i"><use href="#i-still"/></svg>Quieto<span class="pf-dot"></span></button>
+            <hr class="pf-hr">
+            <button type="button" class="pf-row pf-spin" role="menuitemcheckbox" aria-checked="false"><svg class="i"><use href="#i-spin"/></svg>Giro automático<span class="pf-sw"></span></button>
+        </div>
+        <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+            <symbol id="i-natural" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.2"/><path d="M12 8.5V15M7.5 11h9M12 15l-3 5M12 15l3 5"/></symbol>
+            <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.2"/><path d="M12 8.5l-.5 6.5M12 10l-3.5 3M12 10l3.5 2.5M11.5 15l-4 5M11.5 15l4 4.5"/></symbol>
+            <symbol id="i-run" viewBox="0 0 24 24"><circle cx="14" cy="5" r="2.2"/><path d="M13.5 8.5L11.5 14M13.5 9.5L9 10.5M13.5 9.5l3.5 3M11.5 14l-4.5 3M11.5 14l4 4.5M3.5 9h3M2.5 12.5h3"/></symbol>
+            <symbol id="i-wave" viewBox="0 0 24 24"><circle cx="11" cy="6" r="2.2"/><path d="M11 9.5V16M11 11.5l-3.5 3M11 11.5l4-4M11 16l-3 4.5M11 16l3 4.5M18 4.5a3.5 3.5 0 011 2.5M20 3a6 6 0 011.5 4"/></symbol>
+            <symbol id="i-crouch" viewBox="0 0 24 24"><circle cx="12" cy="7" r="2.2"/><path d="M12 10.5V14M8 12.5h8M12 14l-4 3.5 1 3M12 14l4 3.5-1 3"/></symbol>
+            <symbol id="i-still" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol>
+            <symbol id="i-spin" viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.6-5.9"/><path d="M20.5 3.5v4.2h-4.2"/></symbol>
+            <symbol id="i-motion" viewBox="0 0 24 24"><path d="M4 8c3-4 6 4 9 0s5 3 7-1M4 16c3-4 6 4 9 0s5 3 7-1"/></symbol>
+        </svg>
+    </section>
+
+    <section class="pf-right">
+        <header class="pf-head">
+            <h2 class="pf-title">Mis skins</h2>
+            <button type="button" class="pf-btn pf-add">Agregar skin</button>
+            <input type="file" class="pf-file" accept=".png,image/png" hidden tabindex="-1">
+        </header>
+        <!-- El aviso va debajo del titulo y su espacio siempre esta reservado (oculto = invisible), asi nada se mueve -->
+        <p class="pf-msg" role="status" hidden><span class="pf-msg-text"></span></p>
+
+        <div class="pf-skins">
+            <div class="pf-grid" role="list" aria-label="Mis skins"></div>
+            <div class="empty-state pf-empty" hidden>
+                <div class="empty-title">Todavía no tienes skins</div>
+                <div class="empty-text">Agrega un archivo .png de 64×64 píxeles y elige con cuál jugar.</div>
+            </div>
+        </div>
+
+        <footer class="pf-foot">
+            <div class="pf-stats">
+                <div><span class="pf-label">Horas jugadas</span><b class="pf-hours">—</b></div>
+                <div><span class="pf-label">Última vez</span><b class="pf-last">—</b></div>
+                <div><span class="pf-label">Jugador desde</span><b class="pf-since">—</b></div>
+            </div>
+            <div class="pf-actions">
+                <button type="button" class="pf-btn pf-change">Gestionar cuentas</button>
+            </div>
+        </footer>
+    </section>
+
+    <!-- Mis cuentas: ventana flotante (se mueve al body al iniciar) -->
+    <div class="acc-modal" aria-hidden="true">
+        <div class="acc-box" role="dialog" aria-label="Gestionar cuentas">
+            <button type="button" class="acc-x" aria-label="Cerrar">×</button>
+            <div class="acc-title">Gestionar cuentas</div>
+            <div class="acc-sub">Elige con cuál jugar, agrega otra o elimina las que ya no uses.</div>
+            <div class="accounts-list">
+                <div class="account add" id="add">
+                    <span class="add-plus">+</span><span class="add-text-profile">Añadir cuenta</span>
+                </div>
+            </div>
+            <div class="acc-note">Quitar una cuenta no borra tu progreso en el servidor. Si quitas la última, volverás a la pantalla de inicio de sesión.</div>
+            <div class="acc-foot"><button type="button" class="pf-btn acc-close">Cerrar</button></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,105 @@
+/* Ventana de registros (src/log.html): reutiliza los estilos del registro de console.css y del cristal (glass.css).
+   Aqui solo va el marco propio: marca arriba como el launcher, cabecera de estado, aviso de cierre inesperado,
+   barra de herramientas y estado vacio. */
+.logbody { background: var(--pa-bg); }
+.logwin { position: fixed; inset: 0; box-sizing: border-box; padding: 14px 20px 12px; }
+.logwin .log-view { padding: 0; gap: 12px; position: relative; z-index: 1; } /* por encima de la imagen de fondo (.scene-bg, z-index 0) */
+
+/* Marca: la misma pildora de cristal que la barra superior del launcher (glass.css la pinta) */
+.log-top { flex: none; height: 52px; display: flex; align-items: center; justify-content: space-between; }
+/* Unico camino de vuelta al launcher: arriba a la derecha, donde la ventana no tenia nada */
+.logwin .log-back { height: 38px; padding: 0 18px 0 12px; display: inline-flex; align-items: center; gap: 6px; }
+.logwin .log-back svg { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+/* Cancelar vive en la cabecera de estado, junto a lo que cancela, y solo existe mientras el juego carga */
+.logwin .log-head-text { flex: 1; min-width: 0; }
+.logwin .log-cancel { flex: none; height: 38px; padding: 0 20px; margin-left: auto; }
+.logwin[data-loading="0"] .log-cancel { display: none; }
+.logwin .log-back:focus-visible, .logwin .log-cancel:focus-visible { outline: 2px solid var(--pa-accent-light, #b794ff); outline-offset: 2px; }
+/* glass.css acorta la marca a solo el logo bajo 1040 px porque ahi hay pestanas; esta ventana no las tiene, asi que conserva el nombre */
+body .logwin .brand { font-size: 15px; padding: 6px 20px 6px 8px; }
+body .logwin .brand span { display: inline; }
+
+/* Cabecera de estado: icono dibujado (no letras) con los colores de estado del launcher */
+.logwin .log-head { gap: 14px; margin-top: 2px; }
+.logwin .log-badge {
+    width: 40px; height: 40px; flex: none; box-sizing: border-box; border-radius: 50%;
+    color: var(--pa-accent-light); background: rgba(139, 92, 246, .14); border: 1px solid rgba(183, 148, 255, .4);
+}
+.logwin .log-badge svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.logwin .log-badge.ok { color: var(--pa-ok); background: rgba(74, 222, 128, .12); border-color: rgba(74, 222, 128, .45); }
+.logwin .log-badge.err { color: var(--pa-error); background: rgba(248, 113, 113, .12); border-color: rgba(248, 113, 113, .5); }
+.logwin .log-badge.busy { background: transparent; border: 4px solid var(--pa-line); border-top-color: var(--pa-accent); }
+/* Subtitulo sobre la imagen: mas claro (lavanda del acento, no gris) y con una sombra suave con desplazamiento para separarlo del paisaje */
+.logwin .log-title { text-shadow: 0 1px 10px rgba(3, 1, 14, .6); }
+.logwin .log-sub { font-size: 13px; color: #d8d0fa; text-shadow: 0 1px 8px rgba(3, 1, 14, .85), 0 0 2px rgba(3, 1, 14, .6); }
+
+/* Aviso de cierre inesperado: debajo del titulo, con la accion de ayuda dentro */
+.log-alert {
+    display: none; align-items: center; gap: 14px; padding: 8px 8px 8px 18px; box-sizing: border-box;
+    border: 1px solid rgba(248, 113, 113, .42); border-radius: var(--r-lg, 16px);
+    background: linear-gradient(160deg, rgba(138, 42, 50, .3), rgba(40, 12, 28, .5));
+    box-shadow: var(--spec-soft), var(--drop-2);
+}
+.logwin[data-error="1"] .log-alert { display: flex; }
+.log-alert p { margin: 0; flex: 1; min-width: 0; font-size: 13px; line-height: 1.4; color: var(--pa-text); }
+body .logwin .log-create {
+    flex: none; height: 38px; padding: 0 20px; color: #fff; background: var(--prime);
+    border-color: rgba(255, 255, 255, .32); box-shadow: var(--prime-shadow);
+}
+body .logwin .log-create:hover:not(:disabled) { background: var(--prime); border-color: #fff; }
+
+/* Barra de herramientas: filtros (control segmentado como en Ajustes), buscador flexible y dos acciones */
+.log-toolbar { gap: 10px; align-items: center; }
+.logwin .log-filters { flex: none; }
+.logwin .log-filters button { padding: 0 14px; white-space: nowrap; }
+.logwin .log-search { flex: 1 1 190px; min-width: 150px; max-width: none; height: 40px; border-radius: var(--r-md, 12px); }
+.logwin .log-tools { margin-left: 0; }
+.logwin .log-tools .pa-btn { height: 40px; padding: 0 16px; display: inline-flex; align-items: center; gap: 8px; }
+.logwin .log-tools svg { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+/* Foco de teclado visible en los controles de la ventana (el resto del launcher ya lo tiene: contorno de 2 px, mismo color). */
+.logwin .log-tools .pa-btn:focus-visible, .logwin .log-create:focus-visible, .logwin .log-down:focus-visible,
+.logwin .log-filters button:focus-visible, .logwin .log-lines:focus-visible { outline: 2px solid var(--pa-accent-light, #b794ff); outline-offset: 2px; }
+.logwin .log-filters button:focus-visible { outline-offset: -2px; }
+.logwin .log-search:focus-visible { outline: none; border-color: var(--pa-accent); }
+/* Pausar / Reanudar: el ancho no cambia al cambiar de texto (la barra no se mueve). En pausa el boton queda resaltado. */
+.logwin .log-tools .log-pause { min-width: 124px; justify-content: center; }
+.logwin .log-tools .log-pause.on { border-color: var(--pa-accent); color: var(--pa-accent-light); background: rgba(124, 58, 237, .18); }
+
+/* Caja del registro */
+.logwin .log-box { min-height: 0; }
+/* Velo oscuro detras de las lineas (sin desenfoque): asegura la lectura sobre cualquier parte del fondo. Medido sobre fondos de muy oscuros a
+   muy claros: el gris atenuado queda en 4,7:1 o mas y el rojo del error en 5,0:1 o mas (minimo 4,5:1). */
+.logwin .log-lines { border: 0; background: rgba(11, 9, 22, .55); border-radius: var(--r-lg, 16px); }
+.logwin .log-lines::-webkit-scrollbar-track { background: transparent; }
+
+/* Estado vacio dentro de la caja (sin registros, o sin coincidencias con el filtro) */
+.log-empty { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 0 24px; text-align: center; pointer-events: none; }
+.log-empty > svg { width: 30px; height: 30px; fill: none; stroke: var(--pa-accent-light); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; opacity: .8; }
+.log-empty b { display: block; font-size: 15px; font-weight: 600; }
+.log-empty span { display: block; margin-top: 2px; font-size: 13px; color: var(--pa-muted); }
+.log-empty .empty-none, .log-empty .empty-nomatch { display: none; }
+.log-box[data-state="none"] .log-empty, .log-box[data-state="nomatch"] .log-empty { display: flex; }
+.log-box[data-state="none"] .empty-none, .log-box[data-state="nomatch"] .empty-nomatch { display: block; }
+
+/* Pie: solo avisos de las acciones (copiado, archivo creado). Altura reservada para que nada se mueva al aparecer. */
+.logwin .log-foot { min-height: 18px; padding: 0 4px; }
+.log-foot-note { font-size: 12px; line-height: 18px; color: var(--pa-muted); }
+
+/* Ventanas estrechas: las dos acciones quedan como botones cuadrados con su icono (nombre en el aviso al pasar el raton y para lectores)
+   para que la barra de herramientas no salte a una segunda fila */
+@media (max-width: 760px) {
+    .logwin .log-tools .pa-btn, .logwin .log-tools .log-pause { width: 40px; min-width: 0; padding: 0; justify-content: center; }
+    .logwin .log-tools .pa-btn span { display: none; }
+}
+
+/* Ventanas bajas: marca y espacios mas compactos */
+@media (max-height: 520px) {
+    .logwin { padding-top: 10px; }
+    .log-top { height: 44px; }
+    .logwin .log-view { gap: 10px; }
+    .logwin .log-badge { width: 34px; height: 34px; }
+    .logwin .log-title { font-size: 18px; }
+}
+
+/* Sin imagen de fondo (FONDO_IMAGENES en false): brillo suave arriba para que el cristal tenga algo que reflejar */
+.logbody:not(.has-scene)::before { content: ""; position: fixed; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(106, 51, 215, .14), rgba(106, 51, 215, 0) 70%); pointer-events: none; }

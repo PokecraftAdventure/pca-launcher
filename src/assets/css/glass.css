@@ -1,0 +1,195 @@
+/*
+ * Pokecraft Adventure Launcher
+ * Estilo "liquid glass" (prueba): UN sistema para todo el launcher. Se importa al final de launcher.css; para volver
+ * al estilo anterior basta quitar ese @import.
+ * Formas: rectangulos de esquinas redondeadas, solo 3 radios. Esquinas concentricas: radio interior = radio exterior
+ * - borde - relleno (selectores 12-1-3=8, pestañas 16-1-5=10).
+ * Cristal en 3 niveles: SUPERFICIE (tarjetas y grupos), CONTROL (botones, chips, pestañas) y CAMPO (hundido).
+ * El desenfoque solo va en la capa que esta sobre el fondo; en modo ligero (body.lite) no hay desenfoque ni animaciones.
+ */
+:root {
+  /* formas */
+  --r-sm: 8px;    /* etiquetas, insignias */
+  --r-md: 12px;   /* botones, chips, campos, selectores, pestañas */
+  --r-lg: 16px;   /* tarjetas, grupos flotantes, JUGAR */
+
+  /* nivel 1 · superficie */
+  --g1-fill: linear-gradient(160deg, rgba(36, 27, 82, .46), rgba(14, 10, 34, .52));   /* antes .55/.62: deja ver el paisaje sin tocar la lectura */
+  --g1-blur: blur(10px) saturate(1.35);
+  /* nivel 2 · control */
+  --g2-fill: linear-gradient(160deg, rgba(150, 112, 245, .20), rgba(44, 30, 100, .32));
+  --g2-fill-hover: linear-gradient(160deg, rgba(170, 132, 255, .32), rgba(60, 40, 130, .38));
+  --g2-blur: blur(14px) saturate(1.6) brightness(1.06);
+  /* nivel 3 · campo hundido */
+  --g3-fill: rgba(6, 4, 18, .42);
+  /* bordes y luz */
+  --edge: rgba(255, 255, 255, .13);
+  --edge-strong: rgba(255, 255, 255, .26);
+  --spec: inset 0 1px 0 rgba(255, 255, 255, .26), inset 0 -1px 0 rgba(255, 255, 255, .05);
+  --spec-soft: inset 0 1px 0 rgba(255, 255, 255, .14);
+  --drop-1: 0 10px 28px rgba(3, 1, 14, .42), 0 2px 5px rgba(3, 1, 14, .32);
+  --drop-2: 0 6px 18px rgba(3, 1, 14, .4), 0 1px 3px rgba(3, 1, 14, .3);
+  /* primario (JUGAR, opcion elegida, boton principal) */
+  --prime: linear-gradient(180deg, rgba(172, 132, 255, .9), rgba(98, 52, 224, .9) 60%, rgba(78, 38, 190, .94));
+  --prime-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -8px 16px rgba(60, 20, 160, .4), 0 8px 24px rgba(106, 51, 216, .5), 0 2px 6px rgba(3, 1, 14, .4);
+}
+
+/* ============ Estructura: sin barras ============ */
+body .topbar, body .bottombar { background: none; border: 0; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; z-index: 3; }
+body .topbar { margin: 14px 20px 0; height: 52px; padding: 0; gap: 0; align-items: center; justify-content: flex-start; position: relative; }
+body .bottombar { margin: 0 20px 16px; height: 56px; padding: 0; gap: 14px; align-items: center; }
+
+/* ============ NIVEL 1 · superficies (tarjetas y grupos) ============ */
+body .brand, body .tabs, body .bar-mid,
+body .settings .card, body .home-news .news-featured, body .home-news .news-mini, body .home-player,
+body .n-card, body .pf-card, body .pf-right, body .acc-box, body .log-box, body .inst-field, body .method {
+  background: var(--g1-fill); -webkit-backdrop-filter: var(--g1-blur); backdrop-filter: var(--g1-blur);
+  border: 1px solid var(--edge); border-radius: var(--r-lg); box-shadow: var(--spec), var(--drop-1);
+}
+/* la tarjeta destacada de la tienda conserva su acento violeta */
+body .n-card.store { background: linear-gradient(160deg, rgba(120, 78, 235, .42), rgba(46, 28, 110, .6)); border-color: rgba(183, 148, 255, .5); }
+
+body .brand { position: relative; padding: 6px 20px 6px 8px; gap: 10px; font-size: 15px; }
+body .brand-logo { height: 34px; }
+body .tabs { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); align-self: auto; padding: 5px; gap: 2px; }
+/* Altura minima de 56 px (igual que JUGAR). Si hay tres lineas (titulo, texto y aviso de las cartas) la pastilla CRECE HACIA ARRIBA,
+   pegada al borde de abajo, para que no se corte nada ni se mueva el resto de la barra. */
+body .bar-mid { flex: 0 1 auto; align-self: flex-end; min-width: 200px; max-width: 520px; height: auto; min-height: 56px; max-height: 84px; padding: 7px 18px; gap: 2px; box-sizing: border-box; overflow: hidden; justify-content: center; border-radius: var(--r-lg); }
+body .bar-mid .bar-title { font-size: 14px; line-height: 1.25; }
+body .bar-mid .bar-progress { height: 6px; flex: none; }
+body .bar-mid .bar-sub, body .bar-mid .bg-download { line-height: 1.25; }
+body .bottombar:has(.play-busy) .bar-mid { flex: 1; }
+/* La pastilla se adapta a su contenido: no hace falta reservar el sitio del aviso (launcher.css lo reserva para la barra antigua) */
+body .bottombar:has(.play-busy) .bar-sub:empty { display: none; height: 0; }
+
+/* ============ NIVEL 2 · controles ============ */
+body .tab { border: 1px solid transparent; border-radius: calc(var(--r-lg) - 6px); /* concentrico: 16 - borde 1 - relleno 5 */ padding: 8px 22px; font-size: 14px; background: none; }
+/* Con cinco pestanas la pastilla pisaba el nombre de la marca en ventanas estrechas: primero se compactan las pestanas y,
+   por debajo de 1040 px, la marca queda solo con el logo (igual que en la tienda). Ningun boton cambia de sitio. */
+@media (max-width: 1139px) { body .tab { padding: 8px 16px; } }
+@media (max-width: 1039px) { body .brand { font-size: 0; padding-right: 8px; } body .brand span { display: none; } }
+body .tab:not(.on):hover { background: rgba(255, 255, 255, .07); }
+body .tab.on { color: #fff; background: var(--prime); border-color: rgba(255, 255, 255, .32); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), 0 0 16px rgba(139, 92, 246, .4); }
+
+body .btn, body .bar-btn, body .soc, body .pf-btn, body .pa-btn, body .chip, body .acc-actions button, body .link-change-account,
+body .news-pager .pg, body .pf-fab, body .inst-btn:not(.primary) {
+  background: var(--g2-fill); border: 1px solid var(--edge); border-radius: var(--r-md); box-shadow: var(--spec-soft), var(--drop-2);
+  -webkit-backdrop-filter: var(--g2-blur); backdrop-filter: var(--g2-blur); color: var(--pa-text);
+}
+body .btn:hover:not(:disabled), body .bar-btn:hover, body .soc:hover, body .pf-btn:hover, body .pa-btn:hover, body .chip:hover,
+body .acc-actions button:hover, body .pf-fab:hover, body .inst-btn:not(.primary):hover:not(:disabled) { background: var(--g2-fill-hover); border-color: var(--edge-strong); }
+body .link-change-account { box-shadow: none; background: none; border-color: transparent; }
+body .link-change-account:hover { background: rgba(255, 255, 255, .07); }
+body .soc { width: 46px; height: 46px; } body .bar-btn { height: 46px; }
+body .bar-right, body .social { gap: 12px; } body .bar-right { margin-left: auto; } body .social { margin-left: 0; }
+
+/* primarios: misma pieza en todas partes */
+body .btn.primary, body .inst-btn.primary, body .chip.on, body .seg button.on, body .pf-fab[aria-expanded="true"], body .n-tag.solid, body .n-tag.store {
+  background: var(--prime); border-color: rgba(255, 255, 255, .34); color: #fff; box-shadow: var(--prime-shadow);
+}
+body .chip.on { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), 0 0 14px rgba(139, 92, 246, .35); }
+body .play-btn {
+  position: relative; width: 224px; height: 56px; border-radius: var(--r-lg); background: var(--prime); border: 1px solid rgba(255, 255, 255, .4);
+  box-shadow: var(--prime-shadow); -webkit-backdrop-filter: blur(10px) saturate(1.5); backdrop-filter: blur(10px) saturate(1.5); text-shadow: 0 1px 8px rgba(40, 10, 120, .6);
+}
+body .play-btn:hover { filter: brightness(1.1) saturate(1.1); }
+/* Mientras carga, JUGAR pasa a ser CANCELAR en su mismo sitio: control de cristal secundario (JUGAR es el unico boton principal) */
+body .play-instance.play-cancelable .play-btn { background: var(--g2-fill); border-color: var(--edge-strong); color: var(--pa-text); box-shadow: var(--spec-soft), var(--drop-2); font-size: 17px; letter-spacing: .04em; text-shadow: none; cursor: pointer; }
+body .play-instance.play-cancelable .play-btn:hover { background: var(--g2-fill-hover); filter: none; }
+body .play-instance.play-cancelable .play-btn:focus-visible { outline: 2px solid var(--pa-accent-light, #b794ff); outline-offset: 3px; }
+body .play-instance.play-cancelable .play-label { display: inline-flex; align-items: center; gap: 10px; }
+.cancel-ico { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
+/* ============ NIVEL 3 · campos hundidos ============ */
+body .seg, body .input-resolution, body .log-box input, body .search, body .inst-bar {
+  background: var(--g3-fill); border: 1px solid rgba(255, 255, 255, .09); border-radius: var(--r-md); box-shadow: inset 0 2px 6px rgba(3, 1, 14, .45), 0 1px 0 rgba(255, 255, 255, .05);
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+/* Selector segmentado: esquinas CONCENTRICAS. radio interior = radio del campo - borde - relleno (12 - 1 - 3 = 8) */
+:root { --seg-pad: 3px; --seg-r: calc(var(--r-md) - 1px - var(--seg-pad)); }
+body .seg { padding: var(--seg-pad); gap: 2px; overflow: visible; align-items: stretch; }
+body .seg button { height: 32px; margin: 0; border: 1px solid transparent; border-radius: var(--seg-r); background: none; box-shadow: none; }
+body .seg-small button { height: 30px; }
+body .seg button.on { border-color: rgba(255, 255, 255, .34); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), 0 0 12px rgba(139, 92, 246, .35); }
+body .seg button:not(.on):hover { background: rgba(255, 255, 255, .06); }
+
+/* ============ Dentro de una tarjeta: sin segundo desenfoque ============ */
+body .settings .card .btn, body .settings .card .chip, body .home-player *, body .pf-card .pf-btn, body .pf-right .pf-btn, body .acc-box button { -webkit-backdrop-filter: none; backdrop-filter: none; }
+
+/* ============ Etiquetas e insignias ============ */
+body .n-tag, body .badge { border-radius: var(--r-sm); }
+
+/* ============ Fallbacks ============ */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  body .brand, body .tabs, body .bar-mid, body .settings .card, body .n-card, body .pf-card, body .pf-right, body .home-player { background: rgba(22, 16, 50, .94); }
+}
+@media (prefers-reduced-transparency: reduce) {
+  body * { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  body .brand, body .tabs, body .bar-mid, body .settings .card, body .n-card, body .pf-card, body .pf-right, body .home-player { background: rgba(22, 16, 50, .96); }
+}
+
+/* ============ Barra de memoria (RAM) ============ */
+body .ram-range::-webkit-slider-runnable-track {
+  border: 1px solid rgba(255, 255, 255, .09); border-radius: var(--r-sm);
+  background: linear-gradient(90deg, rgba(110, 66, 235, .95), rgba(160, 120, 255, .95)) 0 0 / calc(var(--thumb) / 2 + (100% - var(--thumb)) * var(--f)) 100% no-repeat, var(--g3-fill);
+  box-shadow: inset 0 2px 6px rgba(3, 1, 14, .45), 0 1px 0 rgba(255, 255, 255, .05);
+}
+body .ram-range::-webkit-slider-thumb {
+  border-radius: var(--seg-r, 8px); background: var(--prime); border: 1px solid rgba(255, 255, 255, .4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), 0 0 14px rgba(139, 92, 246, .45), 0 3px 10px rgba(3, 1, 14, .5);
+}
+body .ram-range:hover::-webkit-slider-thumb { background: var(--prime); filter: brightness(1.1); }
+body .ram-ticks .tick.on { color: #fff; }
+
+/* ============ Modo ligero: sin desenfoque (lo quita launcher.css), rellenos solidos y sombras minimas ============ */
+body.lite .brand, body.lite .tabs, body.lite .bar-mid,
+body.lite .settings .card, body.lite .home-news .news-featured, body.lite .home-news .news-mini, body.lite .home-player,
+body.lite .n-card, body.lite .pf-card, body.lite .pf-right, body.lite .acc-box, body.lite .log-box, body.lite .inst-field, body.lite .method {
+  background: rgba(22, 16, 50, .95); box-shadow: var(--spec-soft);
+}
+body.lite .btn, body.lite .bar-btn, body.lite .soc, body.lite .pf-btn, body.lite .pa-btn, body.lite .chip,
+body.lite .acc-actions button, body.lite .news-pager .pg, body.lite .pf-fab, body.lite .inst-btn:not(.primary) { background: rgba(52, 38, 112, .92); box-shadow: none; }
+body.lite .play-btn, body.lite .tab.on, body.lite .btn.primary { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35); }
+
+/* ============ Cuadro de error que impide jugar (utils/errordialog.js) ============ */
+.pca-dialog { position: absolute; inset: 0; z-index: 70; display: flex; align-items: center; justify-content: center;
+  background: rgba(7, 5, 18, .68); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.pca-dialog[hidden] { display: none; }
+body .pca-dialog-box { width: min(500px, 92%); max-height: 90%; overflow: auto; box-sizing: border-box; padding: 24px 26px 20px;
+  background: rgba(25, 18, 56, .92); border: 1px solid var(--edge-strong); border-radius: var(--r-lg); box-shadow: var(--spec-soft), 0 20px 50px rgba(3, 1, 14, .6); }
+.pca-dialog-head { display: flex; align-items: center; gap: 14px; }
+.pca-dialog-head h2 { margin: 0; font-size: 18px; line-height: 1.3; color: var(--pa-text); }
+.pca-dialog-icon { width: 40px; height: 40px; flex: none; display: grid; place-items: center; border-radius: var(--r-md);
+  background: rgba(248, 113, 113, .14); border: 1px solid rgba(248, 113, 113, .5); }
+.pca-dialog-icon svg { width: 22px; height: 22px; fill: none; stroke: var(--pa-error); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.pca-dialog-message { margin: 16px 0 0; font-size: 13px; line-height: 1.55; color: var(--pa-text); word-break: break-word; user-select: text; }
+.pca-dialog-help { margin: 6px 0 0; font-size: 13px; line-height: 1.55; color: var(--pa-muted); }
+.pca-dialog-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+body .pca-dialog-actions .btn { height: 40px; margin: 0; padding: 0 18px; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer; }
+body .pca-dialog-actions .btn.primary { min-width: 130px; font-weight: 700; }
+body .pca-dialog-actions .btn:disabled { opacity: .6; cursor: default; }
+body .pca-dialog-actions .btn:focus-visible { outline: 2px solid var(--pa-accent-light); outline-offset: 3px; }
+body .pca-dialog-actions .pca-dialog-log { margin-right: auto; }
+body.lite .pca-dialog { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(7, 5, 18, .84); }
+body.lite .pca-dialog-box { background: rgb(25, 18, 56); box-shadow: var(--spec-soft); }
+body.lite .pca-dialog-actions .btn.primary { background: var(--prime); }
+
+/* Inicio en modo Ligero: sin halo en el personaje ni foto desenfocada tras la tienda (colores solidos) */
+body.lite .bust-canvas, body.lite .bust { filter: none; }
+body.lite .shop-bg { display: none; }
+/* La tienda sigue destacando: borde, brillo fijo y violeta vivo (nada de esto se anima ni desenfoca) */
+body.lite .news-store { background: linear-gradient(135deg, #5a34c4, #2a1670 70%); box-shadow: 0 0 22px rgba(139, 92, 246, .75); }
+body.lite .news-store::after { display: none; }
+body.lite .n-card.wide.store { background: #34208a; }
+
+/* Sin soporte de desenfoque o con "menos transparencia" en el sistema: rellenos solidos */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  body .brand, body .tabs, body .bar-mid, body .settings .card, body .n-card, body .pf-card, body .pf-right, body .home-player { background: rgba(22, 16, 50, .94); }
+}
+
+/* Ventanas bajas (hasta 620 px de alto, el minimo es 552): barras mas pegadas a los bordes para dejar sitio al contenido */
+@media (max-height: 620px) {
+  body .topbar { margin-top: 8px; }
+  body .bottombar { margin-bottom: 10px; }
+}
+

@@ -1,0 +1,365 @@
+/* Inicio: noticias a la izquierda; a la derecha la ficha del jugador y, debajo, el anuncio de la tienda */
+
+.home .container {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    gap: 18px;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 28px var(--pa-margin) 22px;
+}
+
+.home-news,
+.home-side { min-width: 0; min-height: 0; }
+
+.home-news { display: flex; flex-direction: column; }
+
+.news-list {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--pa-gap);
+}
+
+.home-side {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1.27fr);
+    gap: var(--pa-gap);
+}
+
+.home-side.no-shop { grid-template-rows: minmax(0, 1fr); }
+.home-side.no-shop .home-shop { display: none; }
+.home-shop { min-height: 0; display: flex; }
+
+/* ---- Ficha del jugador: nombre y datos a la izquierda; personaje a la derecha, apoyado abajo ---- */
+
+.home-player {
+    min-height: 0;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, .92fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    container-type: size;       /* el personaje se mide contra la ficha: siempre cuadrado, crezca o encoja */
+    background: var(--background-transparent);
+    border: 1px solid var(--pa-line);
+    border-radius: var(--pa-radius-card);
+    box-sizing: border-box;
+}
+
+.pl-who {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px 4px 10px 22px;
+    border-bottom: 1px solid rgba(183, 148, 255, .3);
+}
+
+.player-name {
+    font-size: 26px;
+    font-weight: 700;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.link-change-account {
+    margin-top: 4px;
+    background: none;
+    border: none;
+    padding: 4px 8px 4px 0;
+    color: var(--pa-text);
+    font-size: var(--pa-fs-small);
+}
+
+.link-change-account:hover { text-decoration: underline; }
+
+.info-card {
+    grid-column: 1;
+    grid-row: 2;
+    min-height: 0;
+    align-self: center;
+    padding: 0 4px 0 22px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    height: 41px;
+    border-bottom: 1px solid rgba(183, 148, 255, .18);
+    white-space: nowrap;
+}
+
+.info-row:last-child { border-bottom: 0; }
+
+.info-row span:first-child {
+    color: var(--pa-muted);
+    font-size: var(--pa-fs-body);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.info-row span:last-child { font-weight: 700; font-size: 14px; }
+
+.bust-wrap {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    position: relative;
+    align-self: end;
+    justify-self: center;
+    width: min(93cqh, 47cqw);
+    height: min(93cqh, 47cqw);
+}
+
+.bust-canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; }   /* !important: el visor 3D fija un tamano en linea y el busto no encogia al reducir la ventana */
+
+.bust {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom;
+    image-rendering: pixelated;
+    pointer-events: none;
+}
+
+/* Halo que sigue la silueta (en modo Ligero no: ver glass.css) */
+.bust-canvas,
+.bust {
+    filter: drop-shadow(0 0 2px #cdb3ff) drop-shadow(0 0 3px var(--pa-accent-light)) drop-shadow(0 0 16px rgba(139, 92, 246, .9));
+}
+
+/* Sin anuncio de tienda la ficha es alta: nombre y datos arriba y el personaje grande debajo */
+.home-side.no-shop .home-player { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr); }
+.home-side.no-shop .info-card { align-self: start; padding: 8px 22px 0; }
+.home-side.no-shop .pl-who { padding-right: 22px; }
+.home-side.no-shop .bust-wrap { grid-column: 1; grid-row: 3; width: min(92cqw, 54cqh); height: min(92cqw, 54cqh); }
+
+/* ---- Noticias ---- */
+
+.news-featured,
+.news-mini {
+    background: var(--background-transparent);
+    border: 1px solid var(--pa-line);
+    border-radius: var(--pa-radius-card);
+    box-sizing: border-box;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* La grande: imagen a toda la tarjeta y el texto sobre un velo abajo */
+.news-featured {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+}
+
+.news-thumb {
+    flex: none;
+    background: var(--pa-scene);
+    background-size: cover;
+    background-position: center;
+}
+
+.news-featured .news-thumb { position: absolute; inset: 0; }
+
+.news-body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+}
+
+.news-featured .news-body {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 64px 24px 18px;
+    background: linear-gradient(transparent, rgba(13, 8, 34, .84) 40%, rgba(13, 8, 34, .96));
+}
+
+.news-label {
+    font-size: var(--pa-fs-micro);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--pa-accent-light);
+    text-transform: uppercase;
+}
+
+.news-title {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.22;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;      /* un titulo largo se recorta con puntos suspensivos en vez de desbordar la tarjeta */
+    overflow: hidden;
+    overflow-wrap: break-word;  /* solo parte una palabra si de verdad no cabe */
+}
+
+.news-text {
+    font-size: var(--pa-fs-body);
+    color: var(--pa-muted);
+    line-height: 1.5;
+    flex: none;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+.news-meta {
+    font-size: var(--pa-fs-small);
+    color: var(--pa-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.news-row {
+    flex: none;
+    height: 132px;
+    display: flex;
+    gap: var(--pa-gap);
+}
+
+.news-mini {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    gap: 12px;
+    padding: 10px;
+}
+
+.news-mini .news-thumb { width: 80px; border-radius: 10px; }
+.news-mini .news-body { flex: 1; }
+.news-mini .news-title { font-size: 14px; -webkit-line-clamp: 3; }
+
+/* ---- Anuncio de la tienda: lo que mas destaca (foto entera, borde encendido y su propia foto desenfocada de fondo) ---- */
+
+.news-store {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    overflow: hidden;
+    box-sizing: border-box;
+    border-radius: 16px;
+    border: 2px solid var(--pa-accent-light);
+    background: linear-gradient(160deg, #3a2288, #1f1050);
+    box-shadow: 0 10px 34px rgba(139, 92, 246, .55), 0 2px 10px rgba(3, 1, 14, .5);
+    cursor: pointer;
+}
+
+.shop-bg {
+    position: absolute;
+    inset: -30px;
+    z-index: -2;
+    background-size: cover;
+    background-position: center 62%;
+    filter: blur(18px) saturate(1.25) brightness(.62);
+}
+
+.news-store::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(100deg, rgba(20, 10, 52, .12), rgba(24, 12, 66, .5) 42%, rgba(22, 11, 58, .82));
+}
+
+/* La foto se ve entera sea vertical o apaisada */
+.shop-img {
+    flex: none;
+    width: 42%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: grid;
+    place-items: center;
+}
+
+.news-store.no-img .shop-img { background-color: var(--pa-accent-strong); }
+.shop-img svg { width: 56px; height: 56px; fill: none; stroke: #fff; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+.shop-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 18px;
+    text-shadow: 0 1px 6px rgba(5, 2, 20, .75);
+}
+
+.shop-tag {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: var(--pa-fs-micro);
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--prime, var(--pa-accent-strong));
+    border: 1px solid rgba(255, 255, 255, .4);
+}
+
+.shop-tag svg { width: 13px; height: 13px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.news-store .news-title { font-size: 19px; -webkit-line-clamp: 4; }
+.news-store .news-text { font-size: 12px; color: #e6e0ff; -webkit-line-clamp: 4; }
+.news-store .news-meta { font-size: var(--pa-fs-micro); color: #e6e0ff; }
+
+/* Ventana estrecha: textos algo mas pequenos */
+@media (max-width: 1100px) {
+    .news-featured .news-title { font-size: 20px; }
+    .news-store .news-title { font-size: 15px; -webkit-line-clamp: 3; }
+    .news-store .news-text { -webkit-line-clamp: 2; }
+    .player-name { font-size: 21px; }
+}
+
+/* Ventanas bajas (el minimo es 980x552) */
+@media (max-height: 640px) {
+    .home .container { padding-top: 12px; padding-bottom: 8px; gap: 12px; }
+    .news-list { gap: 10px; }
+    .news-row { height: 96px; gap: 10px; }
+    .news-mini { gap: 8px; padding: 8px; }
+    .news-mini .news-thumb { width: 52px; }
+    .news-mini .news-title { font-size: 12px; -webkit-line-clamp: 2; }
+    .news-mini .news-label,
+    .news-mini .news-meta,
+    .news-featured .news-text,
+    .news-store .news-text,
+    .news-store .news-meta { display: none; }
+    .news-featured .news-title { font-size: 18px; }
+    .news-featured .news-body { padding: 40px 16px 10px; gap: 3px; }
+    .home-side { gap: 12px; grid-template-rows: minmax(0, 1.08fr) minmax(0, 1fr); }
+    .home-side.no-shop { grid-template-rows: minmax(0, 1fr); }
+    .news-store .news-title { font-size: 14px; -webkit-line-clamp: 3; }
+    .shop-body { padding: 10px 12px; gap: 6px; }
+    .home-player { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); }
+    .home-side.no-shop .home-player { grid-template-columns: minmax(0, 1fr); }
+    .home-side.no-shop .info-card { padding: 4px 14px 0; }
+    .pl-who { padding: 8px 4px 4px 14px; }
+    .player-name { font-size: 17px; }
+    .link-change-account { margin-top: 0; padding-block: 1px; }
+    .info-card { padding: 0 4px 0 14px; }
+    .info-row { height: 28px; }
+    .info-row span:first-child { font-size: 11px; }
+    .info-row span:last-child { font-size: 11px; }
+}

@@ -1,0 +1,12 @@
+# Generated
+node_modules
+app
+test
+dist
+node-v*
+data
+.DS_Store
+
+# Mockups y respaldos tecnicos locales (pesan ~60 MB; no se versionan)
+_mockups/
+_backup_tecnico/

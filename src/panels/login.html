@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="login-card login-choose">
+        <img class="login-logo" src="assets/images/logo.svg" alt="">
+        <div class="login-brand">POKECRAFT ADVENTURE</div>
+        <h1 class="login-title">Iniciar sesión</h1>
+        <p class="login-sub">Elige cómo quieres conectarte</p>
+
+        <div class="login-methods">
+            <button class="method method-microsoft" type="button">
+                <span class="method-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#f25022" d="M2 2h9.5v9.5H2z"/><path fill="#7fba00" d="M12.5 2H22v9.5h-9.5z"/><path fill="#00a4ef" d="M2 12.5h9.5V22H2z"/><path fill="#ffb900" d="M12.5 12.5H22V22h-9.5z"/></svg>
+                </span>
+                <span class="method-text">
+                    <span class="method-tag">PREMIUM</span>
+                    <span class="method-name">Microsoft</span>
+                    <span class="method-desc">Inicia sesión con tu cuenta de Microsoft</span>
+                </span>
+                <span class="method-arrow">→</span>
+            </button>
+
+            <button class="method method-offline" type="button">
+                <span class="method-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </span>
+                <span class="method-text">
+                    <span class="method-tag">NO PREMIUM</span>
+                    <span class="method-name">Nombre de usuario</span>
+                    <span class="method-desc">Juega sin cuenta de Minecraft</span>
+                </span>
+                <span class="method-arrow">→</span>
+            </button>
+        </div>
+
+        <button class="cancel-home link-btn" type="button" style="display: none;">Volver al perfil</button>
+    </div>
+
+    <div class="login-card login-offline-form">
+        <img class="login-logo" src="assets/images/logo.svg" alt="">
+        <div class="login-brand">NO PREMIUM</div>
+        <h1 class="login-title">Tu nombre de jugador</h1>
+        <p class="login-sub">De 3 a 16 caracteres: letras, números y guion bajo</p>
+
+        <input type="text" class="offline-name" maxlength="16" placeholder="Nombre" autocomplete="off" spellcheck="false" />
+        <div class="login-error" role="alert"></div>
+
+        <div class="login-actions">
+            <button class="primary-btn offline-enter" type="button">Entrar</button>
+            <button class="link-btn offline-back" type="button">Volver</button>
+        </div>
+    </div>
+</div>

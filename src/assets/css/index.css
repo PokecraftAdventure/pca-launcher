@@ -1,0 +1,68 @@
+/* Ventana de arranque (400 x 500): busca actualizaciones, descarga, mantenimiento o error */
+@import "font.css";
+@import "tokens.css";
+
+html, body { height: 100%; margin: 0; overflow: hidden; }
+
+body {
+    font-family: "Poppins", sans-serif;
+    color: var(--pa-text);
+    background: var(--pa-bg);
+}
+
+img { -webkit-user-drag: none; user-select: none; }
+
+#splash {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    animation: fade .5s ease both;
+}
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Fondo: la misma escena que el launcher (utils/background.js), solo estatica y centrada en el cerezo */
+#splash > .scene-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.scene-bg canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.scene-veil { position: absolute; inset: 0; background: var(--pa-bg); opacity: .5; }
+/* Fondo por imagenes (utils/backdrop.js): en el arranque es una sola imagen fija */
+.scene-layer { position: absolute; inset: 0; background-position: center; background-size: cover; background-repeat: no-repeat; opacity: 0; transition: opacity .4s ease; }
+.scene-layer.on { opacity: 1; }
+#splash > * { position: relative; z-index: 1; }
+
+.top { margin-top: 56px; display: flex; flex-direction: column; align-items: center; gap: 14px; transition: opacity .3s; }
+.logo { width: 160px; height: auto; }
+.name { font-size: 20px; font-weight: 700; letter-spacing: .04em; }
+.name span { color: var(--pa-accent-light); }
+
+.mid { flex: 1; width: 100%; box-sizing: border-box; padding: 0 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+.title { font-size: 18px; font-weight: 700; }
+.sub { font-size: 13px; color: var(--pa-muted); min-height: 20px; line-height: 1.5; }
+
+/* Barra de progreso: indeterminada por defecto */
+.bar { width: 260px; height: 8px; margin-top: 18px; border-radius: 6px; background: var(--pa-bg); overflow: hidden; position: relative; }
+.bar span { position: absolute; top: 0; bottom: 0; left: 0; width: 0; border-radius: 6px; background: var(--pa-accent); }
+.bar.indeterminate span { width: 35%; animation: slide 1.3s ease-in-out infinite; }
+@keyframes slide { from { left: -35%; } to { left: 100%; } }
+.pct { font-size: 12px; color: var(--pa-muted); min-height: 18px; }
+
+/* Iconos de mantenimiento / error */
+.state-ico { display: none; width: 60px; height: 60px; border-radius: 50%; align-items: center; justify-content: center; font-size: 26px; font-weight: 700; border: 1px solid; margin-bottom: 8px; }
+[data-state="maintenance"] .state-ico { display: flex; color: var(--pa-warn); border-color: var(--pa-warn); background: rgba(251, 191, 36, .12); }
+[data-state="error"] .state-ico { display: flex; color: var(--pa-error); border-color: var(--pa-error); background: rgba(248, 113, 113, .12); }
+[data-state="maintenance"] .top, [data-state="error"] .top { display: none; }
+[data-state="maintenance"] .bar, [data-state="error"] .bar,
+[data-state="maintenance"] .pct, [data-state="error"] .pct { display: none; }
+
+.action {
+    display: none; margin-top: 18px; height: 40px; padding: 0 24px;
+    font: inherit; font-size: 13px; font-weight: 600; color: var(--pa-text);
+    background: var(--pa-panel); border: 1px solid var(--pa-line); border-radius: 10px; cursor: pointer;
+}
+.action:hover { border-color: var(--pa-accent); }
+.action.show { display: inline-block; }
+.closing { font-size: 12px; color: var(--pa-muted); min-height: 18px; margin-top: 6px; }
+
+.foot { margin-bottom: 20px; font-size: 11px; color: var(--pa-muted); }
